@@ -36,9 +36,11 @@ public:
     }
 
     void Iterate() override {
+        /*TODO*/
     }
 
     void OnRain() override {
+        /*TODO*/
     }
 };
 
@@ -50,9 +52,11 @@ public:
     }
 
     void Iterate() override {
+        /*TODO*/
     }
 
     void OnRain() override {
+        /*TODO*/
     }
 };
 
@@ -63,23 +67,11 @@ public:
         
     }
 
-    void Iterate() override {
+    void Iterate() override { //add moisture to neightbor cells
         /*TODO*/
     }
 
 };
 
-class DirtCell : public Cell {
-public:
-    DirtCell(Map& map) : Cell(map, TerrainTypesEnum::Dirt)
-    {
-        
-    }
 
-    void Iterate() override {
-    }
-
-    void OnRain() override {
-    }
-};
 

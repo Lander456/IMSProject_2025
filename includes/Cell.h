@@ -13,13 +13,9 @@
 
 class Cell {
 private:
-    Map map_;
+    Map& map_;
 
 public:
-    explicit Cell(Map& map, TerrainTypesEnum terainType) : 
-        map_(map), terrain(terainType), soil(0.0,0.0), vegetation(), shade(0.0) {}
-
-
     Terrain terrain;
     Soil soil;
     Vegetation vegetation;
@@ -28,6 +24,9 @@ public:
     virtual void Iterate() { return; }
     virtual void Fertilise() { return; }
     virtual void OnRain() {return; }
+
+    explicit Cell(Map& map, TerrainTypesEnum terainType) : 
+        map_(map), terrain(terainType), soil(0.0,0.0), vegetation(), shade(0.0) {}
 
 };
 
