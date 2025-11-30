@@ -22,6 +22,8 @@ public:
 
     [[nodiscard]] size_t getWidth() const { return width; }
     [[nodiscard]] size_t getHeight() const { return height; }
+
+    void iterate(int numberOfIterations);
 };
 
 #endif //IMS_MAP_H
