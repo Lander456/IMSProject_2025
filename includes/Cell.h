@@ -8,27 +8,26 @@
 #include "Soil.h"
 #include "Terrain.h"
 #include "Vegetation.h"
+#include "Map.h"
 
 
 class Cell {
 private:
-    Terrain terrain_;
-    Soil soil_;
-    Vegetation vegetation_;
-    double shade_;
+    Map& map_;
 
 public:
+    Terrain terrain;
+    Soil soil;
+    Vegetation vegetation;
+    double shade;
 
-    [[nodiscard]] Terrain getTerrain() const { return terrain_; }
-    void setTerrain(const Terrain& t) { terrain_ = t; }
+    virtual void Iterate() { return; }
+    virtual void Fertilise() { return; }
+    virtual void OnRain() {return; }
 
-    void setSoil(const Soil& soil) { soil_ = soil; }
-    [[nodiscard]] Soil getSoil() const { return soil_; }
+    explicit Cell(Map& map, TerrainTypesEnum terainType) : 
+        map_(map), terrain(terainType), soil(0.0,0.0), vegetation(), shade(0.0) {}
 
-    void setVegetation(const Vegetation& v) { vegetation_ = v; }
-    [[nodiscard]] Vegetation getVegetation() const { return vegetation_; }
-
-    Cell();
 };
 
 
