@@ -40,6 +40,10 @@ struct Config {
 
     static constexpr double fieldOnRainMoistureCaptured = 0.9;
 
+    //water
+    static constexpr int waterMoisturizationRange = 3;
+    static constexpr int waterMoisturizationAmmount = 0.1; //note: water effect will overlap -> small value
+
     /* == VEGETATION CONFIG == */
     static constexpr double staticGrowRate = 1.0;
 

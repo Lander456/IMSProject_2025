@@ -38,35 +38,34 @@ Cell* Map::findFloodDirectionNeighbor(int cellX, int cellY){
 
     if(cellX >= (int)width || cellY >= (int)height || cellX < 0 || cellY < 0) return nullptr;
 
-    std::queue< 
-        std::pair< std::pair<int,int>, std::pair<int,int> >
-    > queue;
-
-    // [{ visited_cell{x,y}, from{x,y}}]
-    std::queue< 
-        std::pair< std::pair<int,int>, std::pair<int,int> >
-    > explored;
+    std::queue<std::pair<int,int>> queue;
+    std::vector<std::vector<std::pair<int,int>>> explored(width, std::vector<std::pair<int,int>>(height, {-1,-1}));
     std::vector<std::vector<bool>> isExplored(width, std::vector<bool>(height, false));
 
-    const int dirs[8][2] = {
-        { 0,-1}, {-1, 0}, { 1, 0}, { 0, 1},
-        {-1,-1}, { 1,-1}, {-1, 1}, { 1, 1}
+    const int dirs[4][2] = {
+        { 0,-1}, {-1, 0}, { 1, 0}, { 0, 1}
     };
 
-    queue.push({{cellX, cellY}, {cellX, cellY}});
+    queue.push({cellX, cellY});
     isExplored[cellX][cellY] = true;
 
     //BFS
     while(!queue.empty()){
+
         //pop queue elemnt
-        auto [cell,prev_cell] = queue.front();
-        auto [x, y] = cell;
+        auto [x, y] = queue.front();
         queue.pop();
 
         //explore element
         Cell* c = grid[x][y].get();
         if(c->terrain.getType() == TerrainTypesEnum::Water){ //water found
-            return c;
+
+            std::pair<int,int> step = {x,y};
+            while(explored[step.first][step.second] != std::make_pair(cellX, cellY)){
+                step = explored[step.first][step.second];
+                if (step.first == -1) break;
+            }
+            return grid[step.first][step.second].get();
         }
 
         //add unexplored neigbors from queue
@@ -76,9 +75,13 @@ Cell* Map::findFloodDirectionNeighbor(int cellX, int cellY){
 
              if (newCellX < 0 || newCellY < 0 || newCellX >= (int)width || newCellY >= (int)height)
                 continue;
-        }
 
-        
+            if(!isExplored[newCellX][newCellY]){
+                isExplored[newCellX][newCellY] = true;
+                explored[newCellX][newCellY] = {x,y};
+                queue.push({newCellX, newCellY});
+            }
+        }
     }
 
     return nullptr;

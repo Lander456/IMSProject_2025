@@ -10,10 +10,11 @@
 #include "Vegetation.h"
 #include "Map.h"
 
-
 class Cell {
 protected:
     Map& map_;
+    int gridX_;
+    int gridY_;
 
 public:
     Terrain terrain;
@@ -21,14 +22,51 @@ public:
     Vegetation vegetation;
     double shade;
 
-    virtual void Iterate() { return; }
-    virtual void Fertilise() { return; }
-    virtual void OnRain() {return; }
+    virtual void Iterate();
+    virtual void Fertilise();
+    virtual void OnRain();
 
-    explicit Cell(Map& map, TerrainTypesEnum terainType) : 
-        map_(map), terrain(terainType), soil(0.0,0.0), vegetation(), shade(0.0) {}
-
+    explicit Cell(Map& map, int x, int y, TerrainTypesEnum terainType);
 };
 
+class HabitableCell : public Cell{
+public:
+        HabitableCell(Map& map, int x, int y, TerrainTypesEnum type);
+
+protected:
+    Cell* floodDirectionCell_;
+
+    void findFloodDirectionCell();
+
+    void floodNitre();
+};
+
+class DirtCell : public HabitableCell {
+public:
+    DirtCell(Map& map, int x, int y);
+};
+
+class GravelCell : public HabitableCell {
+public:
+    GravelCell(Map& map, int x, int y);
+};
+
+class FieldCell : public HabitableCell {
+public:
+    FieldCell(Map& map, int x, int y);
+};
+
+class WaterCell : public Cell {
+protected:
+    std::vector<Cell*> cellsInRange_;
+    
+public:
+    WaterCell(Map& map, int x, int y);
+};
+
+class RockCell : public Cell {
+public:
+    RockCell(Map& map, int x, int y);
+};
 
 #endif //IMS_CELL_H

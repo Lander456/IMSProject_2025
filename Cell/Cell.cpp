@@ -5,39 +5,58 @@
 #include "../includes/Config.h"
 #include "../includes/Cell.h"
 
+
+class Cell {
+protected:
+    Map& map_;
+    int gridX_;
+    int gridY_;
+
+public:
+    Terrain terrain;
+    Soil soil;
+    Vegetation vegetation;
+    double shade;
+
+    virtual void Iterate() { return; }
+    virtual void Fertilise() { return; }
+    virtual void OnRain() {return; }
+
+    explicit Cell(Map& map, int x, int y, TerrainTypesEnum terainType) : 
+        map_(map), gridX_(x), gridY_(y), terrain(terainType), soil(0.0,0.0), vegetation(), shade(0.0) {}
+
+};
+
 //shared logic for Dirt, Gravel and Field -> flooding, finding neighbor to nearest water
 class HabitableCell : public Cell{
-protected:
-    Cell* floodDirectionCell;
+public:
+        HabitableCell(Map& map, int x, int y, TerrainTypesEnum type) : Cell(map, x, y,type) {}
 
-    Cell* findFloodDirectionCell(){
-        
-        /*TODO*/
-        return nullptr; 
+protected:
+    Cell* floodDirectionCell_;
+
+    void findFloodDirectionCell(){
+        floodDirectionCell_ = map_.findFloodDirectionNeighbor(gridX_, gridY_);
     }
 
     void floodNitre(){
 
         if(soil.getMoisture() >= Config::floodTreshold){
-            if(floodDirectionCell == nullptr) return;
+            if(floodDirectionCell_ == nullptr) return;
 
-            floodDirectionCell->soil.addMoisture(soil.getMoisture() * Config::floodMoistureTransferedPercentage);
-            floodDirectionCell->soil.addNitrate(soil.getNitrate() * Config::floodNitreTransferedPercentage);
+            floodDirectionCell_->soil.addMoisture(soil.getMoisture() * Config::floodMoistureTransferedPercentage);
+            floodDirectionCell_->soil.addNitrate(soil.getNitrate() * Config::floodNitreTransferedPercentage);
             soil.decayMoisture(1.0 - Config::floodMoistureTransferedPercentage);
             soil.decayNitre(1.0 - Config::floodNitreTransferedPercentage);
         }
     }
-
-public:
-    HabitableCell(Map& map, TerrainTypesEnum type) : Cell(map, type){}
-    
 };
 
 
 
 class DirtCell : public HabitableCell {
 public:
-    DirtCell(Map& map) : HabitableCell(map, TerrainTypesEnum::Dirt)
+    DirtCell(Map& map, int x, int y) : HabitableCell(map, x, y,TerrainTypesEnum::Dirt)
     {
         soil.addMoisture(Config::dirtMoisture);
         soil.addNitrate(Config::dirtNitre);
@@ -59,7 +78,7 @@ public:
 
 class GravelCell : public HabitableCell {
 public:
-    GravelCell(Map& map) : HabitableCell(map, TerrainTypesEnum::Gravel)
+    GravelCell(Map& map, int x, int y) : HabitableCell(map, x, y, TerrainTypesEnum::Gravel)
     {
         soil.addMoisture(Config::gravelMoisture);
         soil.addNitrate(Config::gravelNitre);
@@ -79,7 +98,7 @@ public:
 
 class FieldCell : public HabitableCell {
 public:
-    FieldCell(Map& map) : HabitableCell(map, TerrainTypesEnum::Field)
+    FieldCell(Map& map, int x, int y) : HabitableCell(map, x, y, TerrainTypesEnum::Field)
     {
         soil.addMoisture(Config::fieldMoisture);
         soil.addNitrate(Config::fieldNitre); 
@@ -101,25 +120,29 @@ public:
 };
 
 class WaterCell : public Cell {
-    
+protected:
+    std::vector<Cell*> cellsInRange;
     
 public:
-    WaterCell(Map& map) : Cell(map, TerrainTypesEnum::Water)
+    WaterCell(Map& map, int x, int y) : Cell(map, x, y, TerrainTypesEnum::Water)
     {
-        
+        cellsInRange = map.getCellsInRadius(gridX_, gridY_, Config::waterMoisturizationRange);
     }
     
     //add moisture to neightbor cells
     void Iterate() override 
     { 
-        /*TODO*/
+        for(int i = 0; i < cellsInRange.size(); i++){
+            if(cellsInRange[i]->terrain.isHabitable()){
+                cellsInRange[i]->soil.addMoisture(Config::waterMoisturizationAmmount);
+            }
+        }
     }
-    
 };
 
 class RockCell : public Cell {
 public:
-    RockCell(Map& map) : Cell(map, TerrainTypesEnum::Rock)
+    RockCell(Map& map, int x, int y) : Cell(map, x, y, TerrainTypesEnum::Rock)
     {
 
     }
