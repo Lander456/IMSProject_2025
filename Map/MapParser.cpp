@@ -25,22 +25,20 @@ MapParser::MapParser(std::string inputFileName) : filename_(std::move(inputFileN
 
     openInput(filename_);
 
-    const auto lines = getLines();
+}
 
-    size_t height = lines.size();
-    size_t width = lines[0].size();
+void MapParser::parseMap() {
+
+    auto lines = getLines();
+
+    const size_t height = lines.size();
+    const size_t width = lines[0].size();
 
     auto map = Map(width, height);
 
-    parseMap(map, lines);
-
-}
-
-void MapParser::parseMap(Map map, std::vector<std::string> lines) {
-
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_real_distribution<float> dist(0.0f, 1.0f);
+    std::uniform_real_distribution dist(0.0f, 1.0f);
 
     for (size_t y = 0; y < lines.size(); y++) {
         std::string& line = lines[y];
@@ -52,8 +50,42 @@ void MapParser::parseMap(Map map, std::vector<std::string> lines) {
             auto terrain = Terrain(TerrainLegend.at(line[x]));
             auto vegetation = Vegetation(SpeciesLegend.at(line[x]), dist(gen));
 
+            double nitrate = 0.0;
+            double moisture = 0.0;
+
+            switch (terrain.getType()) {
+                case TerrainTypesEnum::Dirt:
+
+                    nitrate = dist(gen);
+                    moisture = dist(gen);
+                    break;
+                case TerrainTypesEnum::Water:
+
+                    nitrate = 0.0;
+                    moisture = 1.0;
+                    break;
+                case TerrainTypesEnum::Rock:
+
+                    nitrate = 0.0;
+                    moisture = 0.0;
+                    break;
+                case TerrainTypesEnum::Field:
+
+                    nitrate = dist(gen);
+                    moisture = dist(gen);
+                    break;
+                case TerrainTypesEnum::Gravel:
+
+                    nitrate = dist(gen);
+                    moisture = dist(gen);
+                    break;
+            }
+
+            auto soil = Soil(nitrate, moisture);
+
             cell.setTerrain(terrain);
             cell.setVegetation(vegetation);
+            cell.setSoil(soil);
 
         }
     }
