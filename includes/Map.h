@@ -30,6 +30,9 @@ public:
     [[nodiscard]] size_t getHeight() const { return height; }
 
     void iterate(int numberOfIterations);
+
+    std::vector<Cell*> getCellsInRadius(int cellX, int cellY, int radius);
+    Cell* findFloodDirectionNeighbor(int cellX, int cellY);
 };
 
 #endif //IMS_MAP_H
