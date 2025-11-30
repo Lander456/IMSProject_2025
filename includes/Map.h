@@ -1,0 +1,27 @@
+//
+// Created by tadeas on 2025-11-27.
+//
+
+#ifndef IMS_MAP_H
+#define IMS_MAP_H
+
+#include <vector>
+
+#include "Cell.h"
+
+
+class Map {
+private:
+    size_t width, height;
+    std::vector<std::vector<Cell>> grid;
+
+public:
+    Map(const size_t w, const size_t h) : width(w), height(h), grid(h, std::vector<Cell>(w)) {}
+
+    Cell& at(size_t x, size_t y);
+
+    [[nodiscard]] size_t getWidth() const { return width; }
+    [[nodiscard]] size_t getHeight() const { return height; }
+};
+
+#endif //IMS_MAP_H

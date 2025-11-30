@@ -7,11 +7,10 @@
 
 enum class SpeciesEnum {
     None,
-    Acaica,
+    Acacia,
     Shrub,
     Grass,
-    Trees,
-    Crops
+    Trees
 };
 
 #endif //IMS_SPECIESENUM_H

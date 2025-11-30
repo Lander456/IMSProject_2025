@@ -12,8 +12,8 @@ public:
     double nitrogenBonus;
     double spreadModifier;
 
-    SpeciesInfo(double g = 0, double n = 0, double s = 1)
-        : growthRate(g), nitrogenBonus(n), spreadModifier(s) {};
+    SpeciesInfo(const double g = 0, const double n = 0, const double s = 1)
+        : growthRate(g), nitrogenBonus(n), spreadModifier(s) {}
 };
 
 

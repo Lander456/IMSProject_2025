@@ -13,10 +13,10 @@ private:
     TerrainTypesEnum type;
 
 public:
-    explicit Terrain(TerrainTypesEnum t) : type(t) {}
+    explicit Terrain(const TerrainTypesEnum t) : type(t) {}
 
     [[nodiscard]] TerrainTypesEnum getType() const { return type; }
-    [[nodiscard]] bool isHabitable() const { return type != TerrainTypesEnum::Water; }
+    [[nodiscard]] bool isHabitable() const { return type != TerrainTypesEnum::Water && type != TerrainTypesEnum::Rock; }
 };
 
 

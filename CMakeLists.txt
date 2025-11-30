@@ -18,4 +18,8 @@ add_executable(IMS main.cpp
         includes/Terrain.h
         Cell/Cell.cpp
         includes/Cell.h
+        Map/Map.cpp
+        includes/Map.h
+        Map/MapParser.cpp
+        includes/MapParser.h
 )

@@ -8,7 +8,9 @@
 enum class TerrainTypesEnum {
     Dirt,
     Water,
-    Gravel
+    Gravel,
+    Rock,
+    Field
 };
 
 #endif //IMS_TERRAINTYPES_ENUM_H

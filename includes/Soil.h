@@ -9,13 +9,19 @@
 class Soil {
 private:
     double nitrate;
+    double moisture;
 
 public:
-    Soil(double n = 1.0) : nitrate(n) {}
 
-    double getNitrate() const { return nitrate; }
-    void addNitrate(double amt) { nitrate += amt; }
-    void decay(double rate) { nitrate *= rate; }
+    [[nodiscard]] double getNitrate() const { return nitrate; }
+    void addNitrate(const double amt) { nitrate += amt; }
+    void decay(const double rate) { nitrate *= rate; }
+
+    [[nodiscard]] double getMoisture() const { return moisture; }
+    void addMoisture(const double amt) { moisture += amt; }
+    void decayMoisture(const double rate) { moisture *= rate; }
+
+    Soil(const double nitrate, const double moisture) : nitrate(nitrate), moisture(moisture) {}
 };
 
 
