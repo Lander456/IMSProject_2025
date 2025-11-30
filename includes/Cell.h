@@ -12,7 +12,7 @@
 
 
 class Cell {
-private:
+protected:
     Map& map_;
 
 public:

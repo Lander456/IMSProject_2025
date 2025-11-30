@@ -15,7 +15,7 @@ public:
 
     [[nodiscard]] double getNitrate() const { return nitrate; }
     void addNitrate(const double amt) { nitrate += amt; }
-    void decay(const double rate) { nitrate *= rate; }
+    void decayNitre(const double rate) { nitrate *= rate; }
 
     [[nodiscard]] double getMoisture() const { return moisture; }
     void addMoisture(const double amt) { moisture += amt; }

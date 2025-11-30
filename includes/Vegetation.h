@@ -21,7 +21,7 @@ public:
     SpeciesEnum getSpecies() const { return species; }
     double getBiomass() const { return biomass; }
 
-    void grow (double amt) { biomass += amt; }
+    void Iterate() {}
     void setSpecies(SpeciesEnum s) { species = s; biomass = 0.1; }
 };
 

@@ -17,7 +17,7 @@ private:
     std::vector<std::vector<std::unique_ptr<Cell>>> grid;
 
 public:
-    Map(const size_t w, const size_t h) : width(w), height(h), grid(h, std::vector<std::unique_ptr<Cell>>(w))  {}
+    Map(const size_t w, const size_t h) : width(w), height(h), grid(w, std::vector<std::unique_ptr<Cell>>(h))  {}
 
     Cell& at(size_t x, size_t y);
 
@@ -25,6 +25,9 @@ public:
     [[nodiscard]] size_t getHeight() const { return height; }
 
     void iterate(int numberOfIterations);
+
+    std::vector<Cell*> getCellsInRadius(int cellX, int cellY, int radius);
+    Cell* findFloodDirectionNeighbor(int cellX, int cellY);
 };
 
 #endif //IMS_MAP_H
