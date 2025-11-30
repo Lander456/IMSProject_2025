@@ -25,8 +25,8 @@ public:
     virtual void Fertilise() { return; }
     virtual void OnRain() {return; }
 
-    explicit Cell(Map& map, TerrainTypesEnum terainType) : 
-        map_(map), terrain(terainType), soil(0.0,0.0), vegetation(), shade(0.0) {}
+    explicit Cell(Map& map, TerrainTypesEnum terrainType) :
+        map_(map), terrain(terrainType), soil(0.0,0.0), vegetation(), shade(0.0) {}
 
 };
 
