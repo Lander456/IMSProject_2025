@@ -16,6 +16,9 @@ std::unique_ptr<Cell>& Map::at(const size_t x, const size_t y) {
     return grid[y][x];
 }
 
+void Map::iterate() {
+}
+
 std::vector<Cell*> Map::getCellsInRadius(const int cellX, const int cellY, const int radius) {
     std::vector<Cell*> cells;
 
