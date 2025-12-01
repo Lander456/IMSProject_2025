@@ -14,12 +14,12 @@ private:
     double biomass;
 
 public:
-    Vegetation(SpeciesEnum s = SpeciesEnum::None, double b = 0)
+    explicit Vegetation(SpeciesEnum s = SpeciesEnum::None, double b = 0)
         : species(s), biomass(b) {}
 
-    bool isEmpty() const { return species == SpeciesEnum::None; }
-    SpeciesEnum getSpecies() const { return species; }
-    double getBiomass() const { return biomass; }
+    [[nodiscard]] bool isEmpty() const { return species == SpeciesEnum::None; }
+    [[nodiscard]] SpeciesEnum getSpecies() const { return species; }
+    [[nodiscard]] double getBiomass() const { return biomass; }
 
     void Iterate() {}
     void setSpecies(SpeciesEnum s) { species = s; biomass = 0.1; }

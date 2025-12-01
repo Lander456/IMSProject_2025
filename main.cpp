@@ -1,6 +1,7 @@
 
 #include "includes/ArgParser.h"
 #include "includes/MapParser.h"
+#include "includes/Simulator.h"
 
 int main (int argc, char *argv[]) {
 
@@ -28,5 +29,7 @@ int main (int argc, char *argv[]) {
     }
 
     outputFile.close();
+
+    auto simulator = Simulator(std::move(map), options.gens);
 
 }

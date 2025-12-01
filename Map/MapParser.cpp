@@ -8,6 +8,7 @@
 
 #include "../includes/MapParser.h"
 #include "../includes/Cell.h"
+#include "../includes/Errnos.h"
 #include "../includes/Map.h"
 
 void MapParser::openInput(const std::string&) {
@@ -16,7 +17,7 @@ void MapParser::openInput(const std::string&) {
 
     if (!inputFile_.is_open()) {
         std::cerr << "Failed to open file!" << std::endl;
-        exit(1);
+        exit(INVALID_INPUT_FILE);
     }
 
 }

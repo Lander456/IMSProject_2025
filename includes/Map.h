@@ -25,7 +25,7 @@ public:
     [[nodiscard]] size_t getWidth() const { return width; }
     [[nodiscard]] size_t getHeight() const { return height; }
 
-    void iterate(int numberOfIterations);
+    void iterate();
 
     std::vector<Cell*> getCellsInRadius(int cellX, int cellY, int radius);
     Cell* findFloodDirectionNeighbor(int cellX, int cellY);

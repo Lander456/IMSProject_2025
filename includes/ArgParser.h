@@ -13,6 +13,7 @@ private:
     typedef struct Options {
         std::string input_file;
         bool verbose;
+        size_t gens;
     } options_t;
 
     static void printHelp(char *argv[]);

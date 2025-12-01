@@ -25,4 +25,7 @@ add_executable(IMS main.cpp
         includes/Config.h
         ArgParser/ArgParser.cpp
         includes/ArgParser.h
+        Simulator/Simulator.cpp
+        includes/Simulator.h
+        includes/Errnos.h
 )
