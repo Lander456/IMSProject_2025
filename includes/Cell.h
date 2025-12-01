@@ -10,6 +10,8 @@
 #include "Vegetation.h"
 #include "Map.h"
 
+class Map;
+
 class Cell {
 protected:
     Map& map_;
@@ -26,7 +28,7 @@ public:
     virtual void Fertilise();
     virtual void OnRain();
 
-    explicit Cell(Map& map, int x, int y, TerrainTypesEnum terainType);
+    Cell(Map& map, int x, int y, TerrainTypesEnum terainType);
 };
 
 class HabitableCell : public Cell{
@@ -44,16 +46,23 @@ protected:
 class DirtCell : public HabitableCell {
 public:
     DirtCell(Map& map, int x, int y);
+    void Iterate() override;
+    void OnRain() override;
 };
 
 class GravelCell : public HabitableCell {
 public:
     GravelCell(Map& map, int x, int y);
+    void Iterate() override;
+    void OnRain() override;
 };
 
 class FieldCell : public HabitableCell {
 public:
     FieldCell(Map& map, int x, int y);
+    void Iterate() override;
+    void OnRain() override;
+    void Fertilise() override;
 };
 
 class WaterCell : public Cell {
@@ -62,6 +71,7 @@ protected:
 
 public:
     WaterCell(Map& map, int x, int y);
+    void Iterate() override;
 };
 
 class RockCell : public Cell {
