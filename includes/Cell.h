@@ -22,9 +22,12 @@ public:
     Vegetation vegetation;
     double shade;
 
-    virtual void Iterate();
-    virtual void Fertilise();
-    virtual void OnRain();
+    virtual void Iterate() { return; }
+    virtual void Fertilise() { return; }
+    virtual void OnRain() {return; }
+
+    explicit Cell(Map& map, TerrainTypesEnum terrainType) :
+        map_(map), terrain(terrainType), soil(0.0,0.0), vegetation(), shade(0.0) {}
 
     explicit Cell(Map& map, int x, int y, TerrainTypesEnum terainType);
 };

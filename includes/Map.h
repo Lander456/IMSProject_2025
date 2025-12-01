@@ -17,7 +17,12 @@ private:
     std::vector<std::vector<std::unique_ptr<Cell>>> grid;
 
 public:
-    Map(const size_t w, const size_t h) : width(w), height(h), grid(w, std::vector<std::unique_ptr<Cell>>(h))  {}
+    Map(const size_t w, const size_t h) : width(w), height(h) {
+        grid.resize(h);
+        for (auto& row : grid) {
+            row.resize(width);
+        }
+    }
 
     Cell& at(size_t x, size_t y);
 

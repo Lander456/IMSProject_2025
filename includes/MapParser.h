@@ -34,15 +34,13 @@ private:
 
     void openInput(const std::string&);
 
-
+    std::vector<std::string> getLines();
 
 public:
 
     explicit MapParser(std::string inputFileName);
 
-    void parseMap(Map map, std::vector<std::string> lines);
-
-    std::vector<std::string> getLines();
+    void parseMap();
 
 };
 
