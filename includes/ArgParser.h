@@ -15,10 +15,11 @@ private:
         bool verbose;
     } options_t;
 
+    static void printHelp(char *argv[]);
+
 public:
     static options_t parseArgs(int argc, char *argv[]);
 
 };
-
 
 #endif //IMS_ARGPARSER_H

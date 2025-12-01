@@ -12,6 +12,10 @@ int main (int argc, char *argv[]) {
 
     auto mapParser = MapParser(options.input_file);
 
+    if (options.verbose) {
+        std::cout << "Parsed input" << std::endl;
+    }
+
     auto map = mapParser.parseMap();
 
     std::ofstream outputFile("log.log");

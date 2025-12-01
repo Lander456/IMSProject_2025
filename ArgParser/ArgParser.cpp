@@ -13,17 +13,18 @@ static option long_options[] = {
     {nullptr, 0, nullptr, 0}
 };
 
+void ArgParser::printHelp(char *argv[]) {
+    std::cout << "Usage: " << argv[0] << " [--help -h] [--verbose -v] [--input_file -f]" << std::endl;
+}
+
 ArgParser::options_t ArgParser::parseArgs(const int argc, char *argv[]) {
     int opt;
     int option_index = 0;
 
     options_t options = {};
 
-    while ((opt = getopt_long(argc, argv, "", long_options, &option_index)) != -1) {
+    while ((opt = getopt_long(argc, argv, "f:vh", long_options, &option_index)) != -1) {
         switch (opt) {
-            case 'h':
-                std::cout << "Usage: " << argv[0] << " [--help -h] [--verbose -v] [--input_file -f]" << std::endl;
-                break;
             case 'v':
                 options.verbose = true;
                 break;
@@ -32,10 +33,19 @@ ArgParser::options_t ArgParser::parseArgs(const int argc, char *argv[]) {
                 break;
             case '?':
                 std::cerr << "Unknown option " << std::endl;
+                printHelp(argv);
                 exit(1);
+            case 'h':
             default:
-                break;
+                std::cout << "Usage: " << argv[0] << " [--help -h] [--verbose -v] [--input_file -f]" << std::endl;
+                exit(0);
         }
+    }
+
+    if (options.input_file.empty()) {
+        std::cerr << "No input file given" << std::endl;
+        printHelp(argv);
+        exit(1);
     }
 
     return options;
