@@ -10,6 +10,7 @@
 
 #include "Cell.h"
 
+class Cell;
 
 class Map {
 private:
@@ -19,7 +20,7 @@ private:
 public:
     Map(size_t w, size_t h);
 
-    Cell& at(size_t x, size_t y) const;
+    [[nodiscard]] std::unique_ptr<Cell>& at(size_t x, size_t y);
 
     [[nodiscard]] size_t getWidth() const { return width; }
     [[nodiscard]] size_t getHeight() const { return height; }

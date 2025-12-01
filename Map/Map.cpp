@@ -12,8 +12,8 @@ Map::Map(const size_t w, const size_t h) : width(w), height(h) {
     }
 }
 
-Cell & Map::at(const size_t x, const size_t y) const {
-    return *grid[x][y];
+std::unique_ptr<Cell>& Map::at(const size_t x, const size_t y) {
+    return grid[y][x];
 }
 
 std::vector<Cell*> Map::getCellsInRadius(const int cellX, const int cellY, const int radius) {

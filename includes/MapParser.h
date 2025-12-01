@@ -40,7 +40,7 @@ public:
 
     explicit MapParser(std::string inputFileName);
 
-    void parseMap();
+    std::unique_ptr<Map> parseMap();
 
 };
 
