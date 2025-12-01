@@ -22,7 +22,10 @@ add_executable(IMS main.cpp
         includes/Map.h
         Map/MapParser.cpp
         includes/MapParser.h
+        includes/Config.h
         ArgParser/ArgParser.cpp
         includes/ArgParser.h
-        inclues/Config.h
+        Simulator/Simulator.cpp
+        includes/Simulator.h
+        includes/Errnos.h
 )

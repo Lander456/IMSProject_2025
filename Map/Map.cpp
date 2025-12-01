@@ -5,25 +5,35 @@
 #include "../includes/Map.h"
 #include <queue>
 
-Cell & Map::at(const size_t x, const size_t y) {
-    return *grid[x][y];
+Map::Map(const size_t w, const size_t h) : width(w), height(h) {
+    grid.resize(h);
+    for (auto& row : grid) {
+        row.resize(width);
+    }
 }
 
-std::vector<Cell*> Map::getCellsInRadius(int cellX, int cellY, int radius) {
+std::unique_ptr<Cell>& Map::at(const size_t x, const size_t y) {
+    return grid[y][x];
+}
+
+void Map::iterate() {
+}
+
+std::vector<Cell*> Map::getCellsInRadius(const int cellX, const int cellY, const int radius) {
     std::vector<Cell*> cells;
 
     if(radius <= 0) return cells;
 
-    int minX = std::max(cellX-radius,0);
-    int maxX = std::min(cellX+radius, (int)width -1);
-    int minY = std::max(cellY-radius, 0);
-    int maxY = std::min(cellY+radius, (int)height-1);
+    const int minX = std::max(cellX-radius,0);
+    const int maxX = std::min(cellX+radius, static_cast<int>(width) -1);
+    const int minY = std::max(cellY-radius, 0);
+    const int maxY = std::min(cellY+radius, static_cast<int>(height)-1);
 
     for(int x = minX; x <= maxX; x++){
         for(int y= minY; y <= maxY; y++){
-            
-            int distanceX = x - cellX;
-            int distanceY = y - cellY;
+
+            const int distanceX = x - cellX;
+            const int distanceY = y - cellY;
 
             if(distanceX*distanceX + distanceY*distanceY <= radius*radius){
                 cells.push_back(grid[x][y].get());
@@ -36,7 +46,7 @@ std::vector<Cell*> Map::getCellsInRadius(int cellX, int cellY, int radius) {
 
 Cell* Map::findFloodDirectionNeighbor(int cellX, int cellY){
 
-    if(cellX >= (int)width || cellY >= (int)height || cellX < 0 || cellY < 0) return nullptr;
+    if(cellX >= static_cast<int>(width) || cellY >= static_cast<int>(height) || cellX < 0 || cellY < 0) return nullptr;
 
     std::queue<std::pair<int,int>> queue;
     std::vector<std::vector<std::pair<int,int>>> explored(width, std::vector<std::pair<int,int>>(height, {-1,-1}));
@@ -70,10 +80,10 @@ Cell* Map::findFloodDirectionNeighbor(int cellX, int cellY){
 
         //add unexplored neigbors from queue
         for(auto& d : dirs){
-            int newCellX = x + d[0];
-            int newCellY = y + d[1];
+            const int newCellX = x + d[0];
+            const int newCellY = y + d[1];
 
-             if (newCellX < 0 || newCellY < 0 || newCellX >= (int)width || newCellY >= (int)height)
+             if (newCellX < 0 || newCellY < 0 || newCellX >= static_cast<int>(width) || newCellY >= static_cast<int>(height))
                 continue;
 
             if(!isExplored[newCellX][newCellY]){

@@ -17,6 +17,8 @@ public:
 
     [[nodiscard]] TerrainTypesEnum getType() const { return type; }
     [[nodiscard]] bool isHabitable() const { return type != TerrainTypesEnum::Water && type != TerrainTypesEnum::Rock; }
+
+    char getTerrainChar();
 };
 
 

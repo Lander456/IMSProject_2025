@@ -6,12 +6,19 @@
 
 #include <getopt.h>
 
+#include "../includes/Errnos.h"
+
 static option long_options[] = {
     {"help", no_argument, nullptr, 'h'},
     {"verbose", no_argument, nullptr, 'v'},
     {"input_file", required_argument, nullptr, 'f'},
+    {"generations_to_simulate", required_argument, nullptr, 'g'},
     {nullptr, 0, nullptr, 0}
 };
+
+void ArgParser::printHelp(char *argv[]) {
+    std::cout << "Usage: " << argv[0] << " [--help -h] [--verbose -v] [--input_file -f]" << std::endl;
+}
 
 ArgParser::options_t ArgParser::parseArgs(const int argc, char *argv[]) {
     int opt;
@@ -19,23 +26,39 @@ ArgParser::options_t ArgParser::parseArgs(const int argc, char *argv[]) {
 
     options_t options = {};
 
-    while ((opt = getopt_long(argc, argv, "", long_options, &option_index)) != -1) {
+    while ((opt = getopt_long(argc, argv, "f:g:vh", long_options, &option_index)) != -1) {
         switch (opt) {
-            case 'h':
-                std::cout << "Usage: " << argv[0] << " [--help -h] [--verbose -v] [--input_file -f]" << std::endl;
-                break;
             case 'v':
                 options.verbose = true;
                 break;
             case 'f':
                 options.input_file = optarg;
                 break;
+            case 'g':
+                errno = 0;
+                char* end;
+                options.gens = std::strtol(optarg, &end, 10);
+
+                if (errno == ERANGE || *end != '\0' || options.gens <= 0) {
+                    std::cerr << "Invalid generations amount, if you want the simulation to go on indefinitely, do not input this arg, otherwise please input a number greater than 0" << std::endl;
+                    exit(INVALID_ARGS);
+                }
+                break;
             case '?':
                 std::cerr << "Unknown option " << std::endl;
-                exit(1);
+                printHelp(argv);
+                exit(INVALID_ARGS);
+            case 'h':
             default:
-                break;
+                std::cout << "Usage: " << argv[0] << " [--help -h] [--verbose -v] [--input_file -f]" << std::endl;
+                exit(0);
         }
+    }
+
+    if (options.input_file.empty()) {
+        std::cerr << "No input file given" << std::endl;
+        printHelp(argv);
+        exit(INVALID_ARGS);
     }
 
     return options;

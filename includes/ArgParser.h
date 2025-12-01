@@ -13,12 +13,14 @@ private:
     typedef struct Options {
         std::string input_file;
         bool verbose;
+        size_t gens;
     } options_t;
+
+    static void printHelp(char *argv[]);
 
 public:
     static options_t parseArgs(int argc, char *argv[]);
 
 };
-
 
 #endif //IMS_ARGPARSER_H

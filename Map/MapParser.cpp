@@ -2,13 +2,14 @@
 // Created by tadeas on 2025-11-29.
 //
 
-
-
 #include <utility>
 #include <iostream>
 #include <random>
 
 #include "../includes/MapParser.h"
+#include "../includes/Cell.h"
+#include "../includes/Errnos.h"
+#include "../includes/Map.h"
 
 void MapParser::openInput(const std::string&) {
 
@@ -16,79 +17,60 @@ void MapParser::openInput(const std::string&) {
 
     if (!inputFile_.is_open()) {
         std::cerr << "Failed to open file!" << std::endl;
-        exit(1);
+        exit(INVALID_INPUT_FILE);
     }
 
 }
 
 MapParser::MapParser(std::string inputFileName) : filename_(std::move(inputFileName)) {
-
     openInput(filename_);
-
 }
 
-void MapParser::parseMap() {
+std::unique_ptr<Map> MapParser::parseMap() {
 
     auto lines = getLines();
 
     const size_t height = lines.size();
     const size_t width = lines[0].size();
 
-    auto map = Map(width, height);
+    auto map = std::make_unique<Map>(width, height);
 
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_real_distribution dist(0.0f, 1.0f);
 
-    for (size_t y = 0; y < lines.size(); y++) {
+    for (int y = 0; y < lines.size(); y++) {
         std::string& line = lines[y];
 
-        for (size_t x = 0; x < map.getWidth(); x++) {
-
-            auto cell = map.at(x, y);
+        for (int x = 0; x < map->getWidth(); x++) {
 
             auto terrain = Terrain(TerrainLegend.at(line[x]));
-            auto vegetation = Vegetation(SpeciesLegend.at(line[x]), dist(gen));
-
-            double nitrate = 0.0;
-            double moisture = 0.0;
+            const auto vegetation = Vegetation(SpeciesLegend.at(line[x]), dist(gen));
 
             switch (terrain.getType()) {
                 case TerrainTypesEnum::Dirt:
-
-                    nitrate = dist(gen);
-                    moisture = dist(gen);
+                    map->at(x, y) = std::make_unique<DirtCell>(*map, x, y);
                     break;
                 case TerrainTypesEnum::Water:
-
-                    nitrate = 0.0;
-                    moisture = 1.0;
+                    map->at(x, y) = std::make_unique<WaterCell>(*map, x, y);
                     break;
                 case TerrainTypesEnum::Rock:
-
-                    nitrate = 0.0;
-                    moisture = 0.0;
+                    map->at(x, y) = std::make_unique<RockCell>(*map, x, y);
                     break;
                 case TerrainTypesEnum::Field:
-
-                    nitrate = dist(gen);
-                    moisture = dist(gen);
+                    map->at(x, y) = std::make_unique<FieldCell>(*map, x, y);
                     break;
                 case TerrainTypesEnum::Gravel:
-
-                    nitrate = dist(gen);
-                    moisture = dist(gen);
+                    map->at(x, y) = std::make_unique<GravelCell>(*map, x, y);
                     break;
             }
 
-            auto soil = Soil(nitrate, moisture);
-
-            cell.setTerrain(terrain);
-            cell.setVegetation(vegetation);
-            cell.setSoil(soil);
+            map->at(x, y)->vegetation = vegetation;
 
         }
     }
+
+    return map;
 
 }
 
