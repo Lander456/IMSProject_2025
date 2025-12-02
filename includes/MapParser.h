@@ -22,9 +22,9 @@ private:
 
     const std::unordered_map<char, SpeciesEnum> SpeciesLegend = {
         {':', SpeciesEnum::Grass},
-        {';', SpeciesEnum::None},
-        {'.', SpeciesEnum::None},
-        {'~', SpeciesEnum::None},
+        {';', SpeciesEnum::NoSpecies},
+        {'.', SpeciesEnum::NoSpecies},
+        {'~', SpeciesEnum::NoSpecies},
         {'|', SpeciesEnum::Trees}
     };
 

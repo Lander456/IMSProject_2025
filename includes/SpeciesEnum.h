@@ -6,7 +6,7 @@
 #define IMS_SPECIESENUM_H
 
 enum class SpeciesEnum {
-    None,
+    NoSpecies,
     Acacia,
     Shrub,
     Grass,

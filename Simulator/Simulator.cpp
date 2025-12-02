@@ -21,14 +21,16 @@ void Simulator::seedFirstGeneration(const size_t numOfAcacias) {
     }
 }
 
-void Simulator::runSimulation() {
-    if (generationsToSim_ < 0) {
-        while (true) {
-            map_->iterate();
-        }
-    }
-    for (size_t gen = 0; gen < generationsToSim_; gen++) {
+void Simulator::iterate(const size_t numOfIterations) const {
+    for (size_t i = 0; i < numOfIterations; i++) {
         map_->iterate();
+    }
+    std::cout << "Iterated!" << std::endl;
+}
+
+void Simulator::runSimulation() {
+    if (outputWindow_->Construct(static_cast<int>(map_->getWidth()), static_cast<int>(map_->getHeight()), 4, 4)) {
+        outputWindow_->Start();
     }
 }
 
@@ -36,4 +38,6 @@ Simulator::Simulator(std::unique_ptr<Map> map, const size_t generationsToSim)
     : generationsToSim_(generationsToSim), map_(std::move(map)) {
     std::random_device rd;
     generator_ = std::mt19937(rd());
+    outputWindow_ = std::make_unique<OutputWindow>();
+    outputWindow_->init(map_.get(), this);
 }
