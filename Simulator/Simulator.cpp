@@ -3,6 +3,7 @@
 //
 
 #include "../includes/Simulator.h"
+#include "../includes/Vegetation.h"
 
 void Simulator::seedFirstGeneration(const size_t numOfAcacias) {
     std::uniform_int_distribution<size_t> distX(0, map_->getWidth() - 1);
@@ -15,7 +16,7 @@ void Simulator::seedFirstGeneration(const size_t numOfAcacias) {
 
             if (map_->at(randX, randY)->terrain.isHabitable()) {
                 attemptingToPlant = false;
-                map_->at(randX, randY)->vegetation = Vegetation(SpeciesEnum::Acacia);
+                map_->at(randX, randY).get()->vegetation->setSpecies(SpeciesEnum::Acacia);
             }
         }
     }

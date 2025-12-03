@@ -9,13 +9,17 @@
 #include <vector>
 
 #include "Cell.h"
+#include "IterationPhaseEnum.h"
 
 class Cell;
 
 class Map {
 private:
+    size_t iterationsSinceRain;
+    size_t iterationsSinceFertilisation;
     size_t width, height;
     std::vector<std::vector<std::unique_ptr<Cell>>> grid;
+    bool expEvent(size_t averageRate, size_t interationSince);
 
 public:
     Map(size_t w, size_t h);
@@ -26,6 +30,8 @@ public:
     [[nodiscard]] size_t getHeight() const { return height; }
 
     void iterate();
+    //called after seeding map grid to connect cells
+    void setUp();
 
     std::vector<Cell*> getCellsInRadius(int cellX, int cellY, int radius);
     Cell* findFloodDirectionNeighbor(int cellX, int cellY);

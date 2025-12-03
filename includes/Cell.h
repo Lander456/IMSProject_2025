@@ -9,69 +9,72 @@
 #include "Terrain.h"
 #include "Vegetation.h"
 #include "Map.h"
+#include "IterationPhaseEnum.h"
 
 class Map;
+class Vegetation;
 
 class Cell {
-protected:
-    Map& map_;
+public:
     int gridX_;
     int gridY_;
-
-public:
+    Map& map_;
     Terrain terrain;
     Soil soil;
-    Vegetation vegetation;
+    std::unique_ptr<Vegetation> vegetation;
     double shade;
+    //moisture first, nitre second
+    std::pair<double,double> incomingSoilChanges;
 
-    virtual void Iterate();
+    virtual void Iterate(IterationPhase phase);
     virtual void Fertilise();
     virtual void OnRain();
+    virtual void SetUp();
 
     Cell(Map& map, int x, int y, TerrainTypesEnum terainType);
 };
 
 class HabitableCell : public Cell{
 public:
-        HabitableCell(Map& map, int x, int y, TerrainTypesEnum type);
-
+    HabitableCell(Map& map, int x, int y, TerrainTypesEnum type);
+    void SetUp() override;
+    std::vector<Cell*> cellsInRange; //includes self
 protected:
     Cell* floodDirectionCell_;
 
-    void findFloodDirectionCell();
-
-    void floodNitre();
+    void flood();
 };
 
 class DirtCell : public HabitableCell {
 public:
     DirtCell(Map& map, int x, int y);
-    void Iterate() override;
+    void Iterate(IterationPhase phase) override;
     void OnRain() override;
 };
 
 class GravelCell : public HabitableCell {
 public:
     GravelCell(Map& map, int x, int y);
-    void Iterate() override;
+    void Iterate(IterationPhase phase) override;
     void OnRain() override;
 };
 
 class FieldCell : public HabitableCell {
 public:
     FieldCell(Map& map, int x, int y);
-    void Iterate() override;
+    void Iterate(IterationPhase phase) override;
     void OnRain() override;
     void Fertilise() override;
 };
 
 class WaterCell : public Cell {
 protected:
-    std::vector<Cell*> cellsInRange_;
+    std::vector<Cell *> cellsInRange_;
 
 public:
     WaterCell(Map& map, int x, int y);
-    void Iterate() override;
+    void Iterate(IterationPhase phase) override;
+    void SetUp() override;
 };
 
 class RockCell : public Cell {

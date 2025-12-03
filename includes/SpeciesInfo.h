@@ -10,10 +10,26 @@ class SpeciesInfo {
 public:
     double growthRate;
     double nitrogenBonus;
+    double shadeTolerance;
+    double shadeCreated;
     double spreadModifier;
+    double maxHeight;
 
-    SpeciesInfo(const double g = 0, const double n = 0, const double s = 1)
-        : growthRate(g), nitrogenBonus(n), spreadModifier(s) {}
+    double moistureMinTolerance;
+    double moistureMaxTolerance;
+    double nitreMinTolerance;
+    double nitreMaxTolerance;
+    double minimalSpreadBiomass;
+
+    SpeciesInfo(const double g = 0, const double n = 0, const double sT = 1, 
+        const double sC = 0,  const double s = 1, const double h = 1,
+        const double mMin = 0, const double mMax = 1, const double nMin = 0, const double nMax = 1, const double bMin = 0.5
+        )
+        : growthRate(g), nitrogenBonus(n),shadeTolerance(sT),
+        shadeCreated(sC), spreadModifier(s), maxHeight(h),
+        moistureMinTolerance(mMin), moistureMaxTolerance(mMax),
+        nitreMinTolerance(nMin), nitreMaxTolerance(nMax), minimalSpreadBiomass(bMin)
+        {}
 };
 
 
