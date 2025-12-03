@@ -28,7 +28,7 @@ void Simulator::iterate(const size_t numOfIterations) const {
     std::cout << "Iterated!" << std::endl;
 }
 
-void Simulator::runSimulation() {
+void Simulator::runSimulation() const {
     if (outputWindow_->Construct(static_cast<int>(map_->getWidth()), static_cast<int>(map_->getHeight()), 4, 4)) {
         outputWindow_->Start();
     }

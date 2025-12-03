@@ -26,7 +26,7 @@ public:
 
     void iterate(size_t numOfIterations) const;
 
-    void runSimulation();
+    void runSimulation() const;
 };
 
 
