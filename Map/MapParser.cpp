@@ -65,7 +65,7 @@ std::unique_ptr<Map> MapParser::parseMap() {
                     break;
             }
 
-            map->at(x, y)->vegetation = vegetation;
+            map->at(x, y)->vegetation = std::make_unique<Vegetation>(vegetation);
 
         }
     }

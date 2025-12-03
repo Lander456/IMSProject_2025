@@ -6,7 +6,9 @@
 #define IMS_VEGETATION_H
 
 #include "SpeciesEnum.h"
+#include "Cell.h"
 
+class HabitableCell;
 
 class Vegetation {
 private:
@@ -21,7 +23,7 @@ public:
     [[nodiscard]] SpeciesEnum getSpecies() const { return species; }
     [[nodiscard]] double getBiomass() const { return biomass; }
 
-    void Iterate() {}
+    void Iterate(HabitableCell* cell);
     void setSpecies(SpeciesEnum s) { species = s; biomass = 0.1; }
 };
 

@@ -3,7 +3,10 @@
 //
 
 #include "../includes/Map.h"
+#include "../includes/Config.h"
 #include <queue>
+#include <cstdlib>
+#include <cmath>
 
 Map::Map(const size_t w, const size_t h) : width(w), height(h) {
     grid.resize(h);
@@ -16,7 +19,78 @@ std::unique_ptr<Cell>& Map::at(const size_t x, const size_t y) {
     return grid[y][x];
 }
 
+
+void Map::setUp(){
+    for(auto& xRow : grid){
+        for(auto& cellPtr : xRow){
+            Cell* c = cellPtr.get();
+            c->SetUp();
+        }
+    }
+}
+
 void Map::iterate() {
+
+    //call rain 
+    iterationsSinceRain++;
+    if(expEvent(Config::rainInterval, iterationsSinceRain))
+    {
+        for(auto& xRow : grid){
+            for(auto& cellPtr : xRow){
+                Cell* c = cellPtr.get();
+                c->OnRain();
+            }
+        }
+        iterationsSinceRain = 0;
+    }
+
+    //call fertilisation
+    iterationsSinceFertilisation++;
+    if(iterationsSinceFertilisation >= Config::fieldFertilisingInterval)
+    {
+        for(auto& xRow : grid){
+            for(auto& cellPtr : xRow){
+                Cell* c = cellPtr.get();
+                c->OnRain();
+            }
+        }
+        iterationsSinceFertilisation = 0;
+    }
+    
+    //update soil cycle
+    for(auto& xRow : grid){
+        for(auto& cellPtr : xRow){
+            Cell* c = cellPtr.get();
+            c->Iterate(IterationPhase::Soil);
+        }
+    }
+    //update flood changes and calculate shade
+    for(auto& xRow : grid){
+        for(auto& cellPtr : xRow){
+            Cell* c = cellPtr.get();
+
+            //update soil
+            c->soil.addMoisture(c->incomingSoilChanges.first);
+            c->soil.addNitrate(c->incomingSoilChanges.second);
+            c->incomingSoilChanges = {0.0,0.0};
+        }
+    }
+    //update vegetation
+    for(auto& xRow : grid){
+        for(auto& cellPtr : xRow){
+            Cell* c = cellPtr.get();
+            c->Iterate(IterationPhase::Vegetation);
+        }
+    }
+    
+}
+
+bool Map::expEvent(size_t averageRate, size_t iterationNumber){
+
+    double roll = static_cast<double>(rand() / static_cast<double>(RAND_MAX));
+    double threshold = 1.0 - exp( -static_cast<double>(iterationNumber) / static_cast<double>(averageRate));
+    return((roll < threshold));
+
 }
 
 std::vector<Cell*> Map::getCellsInRadius(const int cellX, const int cellY, const int radius) {
@@ -77,7 +151,7 @@ Cell* Map::findFloodDirectionNeighbor(int cellX, int cellY){
             }
             return grid[step.first][step.second].get();
         }
-
+        
         //add unexplored neigbors from queue
         for(auto& d : dirs){
             const int newCellX = x + d[0];
