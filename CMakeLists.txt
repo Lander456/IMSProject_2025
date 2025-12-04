@@ -31,6 +31,9 @@ add_executable(IMS
         includes/Errnos.h
         Simulator/OutputWindow.cpp
         includes/OutputWindow.h
+        includes/Colours.h
+        includes/Colours.h
+        includes/Colours.h
 )
 
 target_link_libraries(IMS

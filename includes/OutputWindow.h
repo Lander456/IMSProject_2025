@@ -10,6 +10,7 @@
 #include "Simulator.h"
 #include "SpeciesEnum.h"
 #include "TerrainTypesEnum.h"
+#include "Colours.h"
 
 class Simulator;
 
@@ -20,11 +21,11 @@ private:
     Simulator* simulator_ = nullptr;
 
     std::unordered_map<SpeciesEnum, olc::Pixel> speciesColours {
-        {SpeciesEnum::Acacia, olc::Pixel(161, 116, 39, 128)},
-        {SpeciesEnum::Grass, olc::Pixel(52, 207, 70, 128)},
-        {SpeciesEnum::NoSpecies, olc::Pixel(0, 0, 0, 0)},
-        {SpeciesEnum::Shrub, olc::Pixel(72, 194, 106, 128)},
-        {SpeciesEnum::Trees, olc::Pixel(8, 94, 21, 128)}
+        {SpeciesEnum::Acacia, Colours::RED},
+        {SpeciesEnum::Grass, Colours::BLUE},
+        {SpeciesEnum::NoSpecies, Colours::BLACK_VOID},
+        {SpeciesEnum::Shrub, Colours::GREEN},
+        {SpeciesEnum::Trees, Colours::WHITE}
     };
 
     std::unordered_map<TerrainTypesEnum, olc::Pixel> terrainColours {

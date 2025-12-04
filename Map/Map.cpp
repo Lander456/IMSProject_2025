@@ -24,17 +24,14 @@ std::unique_ptr<Cell>& Map::at(const size_t x, const size_t y) {
 
 
 void Map::setUp(){
-    std::cerr << "Setting up" << std::endl;
+    std::cerr << "Beggining setup" << std::endl;
     SpeciesRegistry::initializeSpeciesRegistry();
     int line = 0;
     int col = 0;
     for(auto& xRow : grid){
         for(auto& cellPtr : xRow){
-            std::cout << "Cell x: " << col << " y: "<< line << std::endl;
             Cell* c = cellPtr.get();
-            std::cout << "Setting cell " << static_cast<int>(c->terrain.getType())  << " x:"<< c->gridX_ << " y:" << c->gridY_ << std::endl;
             c->SetUp();
-            std::cout << "done " << std::endl;
             col++;
         }
         col = 0;
@@ -70,7 +67,6 @@ void Map::iterate() {
         iterationsSinceFertilisation = 0;
     }
 
-    std::cerr << "IterationPhase::Soil start, vegetationPtr = " << at(0, 0)->vegetation << std::endl;
     //update soil cycle
     for(auto& xRow : grid){
         for(auto& cellPtr : xRow){
@@ -89,17 +85,14 @@ void Map::iterate() {
             c->incomingSoilChanges = {0.0,0.0};
         }
     }
-    std::cerr << "IterationPhase::Soil end, vegetationPtr = " << at(0, 0)->vegetation << std::endl;
 
     //update vegetation
-    std::cerr << "IterationPhase::Vegetation start, vegetationPtr = " << at(0, 0)->vegetation << std::endl;
     for(auto& xRow : grid){
         for(auto& cellPtr : xRow){
             Cell* c = cellPtr.get();
             c->Iterate(IterationPhase::Vegetation);
         }
     }
-    std::cerr << "IterationPhase::Vegetation end, vegetationPtr = " << at(0, 0)->vegetation << std::endl;
     
 }
 
@@ -137,7 +130,6 @@ std::vector<Cell*> Map::getCellsInRadius(const int cellX, const int cellY, const
 }
 
 Cell* Map::findFloodDirectionNeighbor(int cellX, int cellY){
-    std::cerr << "Map width: " << width << " height: " << height <<  std::endl;
 
     if(cellX >= static_cast<int>(width) || cellY >= static_cast<int>(height) || cellX < 0 || cellY < 0) return nullptr;
 
