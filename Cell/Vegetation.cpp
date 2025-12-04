@@ -5,11 +5,12 @@
 #include "../includes/SpeciesRegistry.h"
 #include "../includes/Vegetation.h"
 #include "../includes/Config.h"
+#include "../includes/SpeciesEnum.h"
 #include <cstdlib>
 
 
 void Vegetation::Iterate(HabitableCell* cell){
-    if(species == SpeciesEnum::None) return;
+    if(species == SpeciesEnum::NoSpecies) return;
 
     const SpeciesInfo& info = SpeciesRegistry::getSpeciesInfo(species);
     double growFactor = 1.0;
@@ -67,7 +68,7 @@ void Vegetation::Iterate(HabitableCell* cell){
     else if(biomass+growAmmount <= 0){ //plant died
         auto realWither = -biomass;
         biomass = 0;
-        species = SpeciesEnum::None;
+        species = SpeciesEnum::NoSpecies;
         //update shade
         for(Cell* c : cell->cellsInRange){
             if(!c || c==cell) continue; //skip if null or current cell

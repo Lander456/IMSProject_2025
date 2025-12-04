@@ -4,6 +4,8 @@
 
 #include "../includes/OutputWindow.h"
 
+#include <map>
+
 class Simulator;
 
 bool OutputWindow::OnUserCreate() {
@@ -18,10 +20,14 @@ bool OutputWindow::OnUserUpdate(float fElapsedTime) {
     accumulatedTime += fElapsedTime;
 
     while (accumulatedTime >= targetFrameTime) {
+        std::cerr << "Before " << map_->at(0, 0)->vegetation << std::endl;
         simulator_->iterate(1);
+        std::cerr << "After " << map_->at(0, 0)->vegetation << std::endl;
 
         accumulatedTime -= targetFrameTime;
+        std::cerr << "Drawing map" << std::endl;
         drawMap();
+        std::cerr << "Map drawn" << std::endl;
     }
     return true;
 }
@@ -32,7 +38,8 @@ void OutputWindow::drawMap() {
             SetPixelMode(olc::Pixel::Mode::NORMAL);
             Draw(static_cast<int32_t>(x), static_cast<int32_t>(y), terrainColours[map_->at(x, y)->terrain.getType()]);
             SetPixelMode(olc::Pixel::Mode::ALPHA);
-            Draw(static_cast<int32_t>(x), static_cast<int32_t>(y), speciesColours[map_->at(x, y)->vegetation.getSpecies()]);
+            std::cerr << map_->at(x, y)->vegetation << std::endl;
+            Draw(static_cast<int32_t>(x), static_cast<int32_t>(y), speciesColours[map_->at(x, y)->vegetation->getSpecies()]);
         }
     }
 }

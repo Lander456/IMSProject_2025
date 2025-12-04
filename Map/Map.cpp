@@ -7,6 +7,9 @@
 #include <queue>
 #include <cstdlib>
 #include <cmath>
+#include <iostream>
+
+#include "../includes/SpeciesRegistry.h"
 
 Map::Map(const size_t w, const size_t h) : width(w), height(h) {
     grid.resize(h);
@@ -21,6 +24,8 @@ std::unique_ptr<Cell>& Map::at(const size_t x, const size_t y) {
 
 
 void Map::setUp(){
+    std::cerr << "Setting up" << std::endl;
+    SpeciesRegistry::initializeSpeciesRegistry();
     for(auto& xRow : grid){
         for(auto& cellPtr : xRow){
             Cell* c = cellPtr.get();
@@ -56,7 +61,8 @@ void Map::iterate() {
         }
         iterationsSinceFertilisation = 0;
     }
-    
+
+    std::cerr << "IterationPhase::Soil start, vegetationPtr = " << at(0, 0)->vegetation << std::endl;
     //update soil cycle
     for(auto& xRow : grid){
         for(auto& cellPtr : xRow){
@@ -75,13 +81,17 @@ void Map::iterate() {
             c->incomingSoilChanges = {0.0,0.0};
         }
     }
+    std::cerr << "IterationPhase::Soil end, vegetationPtr = " << at(0, 0)->vegetation << std::endl;
+
     //update vegetation
+    std::cerr << "IterationPhase::Vegetation start, vegetationPtr = " << at(0, 0)->vegetation << std::endl;
     for(auto& xRow : grid){
         for(auto& cellPtr : xRow){
             Cell* c = cellPtr.get();
             c->Iterate(IterationPhase::Vegetation);
         }
     }
+    std::cerr << "IterationPhase::Vegetation end, vegetationPtr = " << at(0, 0)->vegetation << std::endl;
     
 }
 
