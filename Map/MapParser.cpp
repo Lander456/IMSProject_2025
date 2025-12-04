@@ -70,6 +70,7 @@ std::unique_ptr<Map> MapParser::parseMap() {
         }
     }
 
+    map->setUp();
     return map;
 
 }
