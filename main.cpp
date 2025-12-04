@@ -1,4 +1,7 @@
 
+#define OLC_PGE_APPLICATION
+
+#include "includes/olcPixelGameEngine.h"
 #include "includes/ArgParser.h"
 #include "includes/MapParser.h"
 #include "includes/Simulator.h"
@@ -32,4 +35,5 @@ int main (int argc, char *argv[]) {
 
     auto simulator = Simulator(std::move(map), options.gens);
 
+    simulator.runSimulation();
 }

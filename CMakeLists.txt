@@ -3,7 +3,8 @@ project(IMS)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(IMS main.cpp
+add_executable(IMS
+        main.cpp
         includes/SpeciesEnum.h
         Species/SpeciesInfo.cpp
         includes/SpeciesInfo.h
@@ -28,4 +29,15 @@ add_executable(IMS main.cpp
         Simulator/Simulator.cpp
         includes/Simulator.h
         includes/Errnos.h
+        Simulator/OutputWindow.cpp
+        includes/OutputWindow.h
+)
+
+target_link_libraries(IMS
+        X11
+        GL
+        GLX
+        png
+        pthread
+        dl
 )

@@ -16,10 +16,10 @@ private:
     double biomass;
 
 public:
-    explicit Vegetation(SpeciesEnum s = SpeciesEnum::None, double b = 0)
+    explicit Vegetation(SpeciesEnum s = SpeciesEnum::NoSpecies, double b = 0)
         : species(s), biomass(b) {}
 
-    [[nodiscard]] bool isEmpty() const { return species == SpeciesEnum::None; }
+    [[nodiscard]] bool isEmpty() const { return species == SpeciesEnum::NoSpecies; }
     [[nodiscard]] SpeciesEnum getSpecies() const { return species; }
     [[nodiscard]] double getBiomass() const { return biomass; }
 
