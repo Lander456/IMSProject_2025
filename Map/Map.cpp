@@ -26,11 +26,19 @@ std::unique_ptr<Cell>& Map::at(const size_t x, const size_t y) {
 void Map::setUp(){
     std::cerr << "Setting up" << std::endl;
     SpeciesRegistry::initializeSpeciesRegistry();
+    int line = 0;
+    int col = 0;
     for(auto& xRow : grid){
         for(auto& cellPtr : xRow){
+            std::cout << "Cell x: " << col << " y: "<< line << std::endl;
             Cell* c = cellPtr.get();
+            std::cout << "Setting cell " << static_cast<int>(c->terrain.getType())  << " x:"<< c->gridX_ << " y:" << c->gridY_ << std::endl;
             c->SetUp();
+            std::cout << "done " << std::endl;
+            col++;
         }
+        col = 0;
+        line++;
     }
 }
 

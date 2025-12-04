@@ -69,8 +69,9 @@ std::unique_ptr<Map> MapParser::parseMap() {
 
         }
     }
-
+    std::cout << "Map seed done" << std::endl;
     map->setUp();
+    std::cout << "Map setup done" << std::endl;
     return map;
 
 }

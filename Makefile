@@ -304,6 +304,30 @@ Map/MapParser.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/IMS.dir/build.make CMakeFiles/IMS.dir/Map/MapParser.cpp.s
 .PHONY : Map/MapParser.cpp.s
 
+Simulator/OutputWindow.o: Simulator/OutputWindow.cpp.o
+.PHONY : Simulator/OutputWindow.o
+
+# target to build an object file
+Simulator/OutputWindow.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/IMS.dir/build.make CMakeFiles/IMS.dir/Simulator/OutputWindow.cpp.o
+.PHONY : Simulator/OutputWindow.cpp.o
+
+Simulator/OutputWindow.i: Simulator/OutputWindow.cpp.i
+.PHONY : Simulator/OutputWindow.i
+
+# target to preprocess a source file
+Simulator/OutputWindow.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/IMS.dir/build.make CMakeFiles/IMS.dir/Simulator/OutputWindow.cpp.i
+.PHONY : Simulator/OutputWindow.cpp.i
+
+Simulator/OutputWindow.s: Simulator/OutputWindow.cpp.s
+.PHONY : Simulator/OutputWindow.s
+
+# target to generate assembly for a file
+Simulator/OutputWindow.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/IMS.dir/build.make CMakeFiles/IMS.dir/Simulator/OutputWindow.cpp.s
+.PHONY : Simulator/OutputWindow.cpp.s
+
 Simulator/Simulator.o: Simulator/Simulator.cpp.o
 .PHONY : Simulator/Simulator.o
 
@@ -431,6 +455,9 @@ help:
 	@echo "... Map/MapParser.o"
 	@echo "... Map/MapParser.i"
 	@echo "... Map/MapParser.s"
+	@echo "... Simulator/OutputWindow.o"
+	@echo "... Simulator/OutputWindow.i"
+	@echo "... Simulator/OutputWindow.s"
 	@echo "... Simulator/Simulator.o"
 	@echo "... Simulator/Simulator.i"
 	@echo "... Simulator/Simulator.s"

@@ -1,0 +1,3 @@
+/home/popcorn/ims/IMSProject_2025/CMakeFiles/IMS.dir
+/home/popcorn/ims/IMSProject_2025/CMakeFiles/edit_cache.dir
+/home/popcorn/ims/IMSProject_2025/CMakeFiles/rebuild_cache.dir

@@ -19,9 +19,9 @@ int main (int argc, char *argv[]) {
     if (options.verbose) {
         std::cout << "Parsed input" << std::endl;
     }
-
+    std::cout << "HEHE" << std::endl;
     auto map = mapParser.parseMap();
-
+    std::cout << "HAHA" << std::endl;
     auto simulator = Simulator(std::move(map), options.gens);
 
     simulator.runSimulation();
