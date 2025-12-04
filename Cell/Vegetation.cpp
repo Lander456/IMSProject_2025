@@ -12,6 +12,7 @@
 void Vegetation::Iterate(HabitableCell* cell){
     if(species == SpeciesEnum::NoSpecies) return;
 
+    
     const SpeciesInfo& info = SpeciesRegistry::getSpeciesInfo(species);
     double growFactor = 1.0;
     
@@ -45,7 +46,7 @@ void Vegetation::Iterate(HabitableCell* cell){
     if(species == SpeciesEnum::Acacia)
     {
         //add nitre for self and neighbor cells
-        for(Cell* c : cell->cellsInRange){
+        for(auto c : cell->cellsInRange){
             if(!c) continue;
             if(c->terrain.isHabitable()){
                 c->soil.addNitrate(biomass/info.maxHeight * Config::extraNitrateFactor);
@@ -60,7 +61,7 @@ void Vegetation::Iterate(HabitableCell* cell){
         auto realGrowth = info.maxHeight - biomass;
         biomass = info.maxHeight;
         //update shade
-        for(Cell* c : cell->cellsInRange){
+        for(auto c : cell->cellsInRange){
             if(!c || c==cell) continue; //skip if null or current cell
             c->shade += ((realGrowth/info.maxHeight)*info.shadeCreated)/4; //1/4 becouse effects 4 neighbor cells
         }
@@ -70,7 +71,7 @@ void Vegetation::Iterate(HabitableCell* cell){
         biomass = 0;
         species = SpeciesEnum::NoSpecies;
         //update shade
-        for(Cell* c : cell->cellsInRange){
+        for(auto c : cell->cellsInRange){
             if(!c || c==cell) continue; //skip if null or current cell
             c->shade += ((realWither/info.maxHeight)*info.shadeCreated)/4;
         }
@@ -79,7 +80,7 @@ void Vegetation::Iterate(HabitableCell* cell){
     else{ //normal grow
         biomass += growAmmount;
         //update shade
-        for(Cell* c : cell->cellsInRange){
+        for(auto c : cell->cellsInRange){
             if(!c || c==cell) continue; //skip if null or current cell
             c->shade += ((growAmmount/info.maxHeight)*info.shadeCreated)/4; 
         }
@@ -87,7 +88,7 @@ void Vegetation::Iterate(HabitableCell* cell){
 
     //try to spread on free cells if biomass big enough
     if(growFactor > 0 && biomass >= info.minimalSpreadBiomass){
-        for(Cell* c : cell->cellsInRange){
+        for(auto c : cell->cellsInRange){
             if(!c) continue;
             if(c->terrain.isHabitable() && c->vegetation->isEmpty()){ 
                 double roll = static_cast<double>(rand() / static_cast<double>(RAND_MAX));
@@ -97,8 +98,4 @@ void Vegetation::Iterate(HabitableCell* cell){
             }
         }
     }
-
-
-
-
 }

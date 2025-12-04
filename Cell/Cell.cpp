@@ -4,6 +4,7 @@
 
 #include "../includes/Config.h"
 #include "../includes/Cell.h"
+#include <iostream>
 
 
 /* == CELL == */
@@ -33,7 +34,9 @@ HabitableCell::HabitableCell(Map &map, int x, int y, TerrainTypesEnum type)
 
 
 void HabitableCell::SetUp(){
+    std::cerr << "Calling Flooding" << std::endl;
     floodDirectionCell_ = map_.findFloodDirectionNeighbor(gridX_, gridY_);
+    std::cerr << "Getting cells in radius" << std::endl;
     cellsInRange = map_.getCellsInRadius(gridX_, gridY_, 1);
 }
 
@@ -150,7 +153,7 @@ void WaterCell::SetUp(){
 
 void WaterCell::Iterate(IterationPhase phase) {
 
-    for(Cell* c : cellsInRange_){
+    for(const auto& c : cellsInRange_){
         if(!c) continue;
         if(c->terrain.isHabitable()){
             c->soil.addMoisture(Config::waterMoisturizationAmmount);

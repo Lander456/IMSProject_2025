@@ -128,7 +128,7 @@ std::vector<Cell*> Map::getCellsInRadius(const int cellX, const int cellY, const
             const int distanceY = y - cellY;
 
             if(distanceX*distanceX + distanceY*distanceY <= radius*radius){
-                cells.push_back(grid[x][y].get());
+                cells.push_back(at(x,y).get());
             }
         }
     }
@@ -137,6 +137,7 @@ std::vector<Cell*> Map::getCellsInRadius(const int cellX, const int cellY, const
 }
 
 Cell* Map::findFloodDirectionNeighbor(int cellX, int cellY){
+    std::cerr << "Map width: " << width << " height: " << height <<  std::endl;
 
     if(cellX >= static_cast<int>(width) || cellY >= static_cast<int>(height) || cellX < 0 || cellY < 0) return nullptr;
 
@@ -159,7 +160,7 @@ Cell* Map::findFloodDirectionNeighbor(int cellX, int cellY){
         queue.pop();
 
         //explore element
-        Cell* c = grid[x][y].get();
+        std::unique_ptr<Cell>& c = at(x,y);
         if(c->terrain.getType() == TerrainTypesEnum::Water){ //water found
 
             std::pair<int,int> step = {x,y};
@@ -167,7 +168,7 @@ Cell* Map::findFloodDirectionNeighbor(int cellX, int cellY){
                 step = explored[step.first][step.second];
                 if (step.first == -1) break;
             }
-            return grid[step.first][step.second].get();
+            return at(step.first, step.second).get();
         }
         
         //add unexplored neigbors from queue

@@ -69,7 +69,7 @@ public:
 
 class WaterCell : public Cell {
 protected:
-    std::vector<Cell *> cellsInRange_;
+    std::vector<Cell*> cellsInRange_;
 
 public:
     WaterCell(Map& map, int x, int y);
