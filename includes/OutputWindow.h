@@ -11,6 +11,7 @@
 #include "SpeciesEnum.h"
 #include "TerrainTypesEnum.h"
 #include "Colours.h"
+#include "MapModeEnum.h"
 
 class Simulator;
 
@@ -19,6 +20,10 @@ private:
     Map* map_ = nullptr;
 
     Simulator* simulator_ = nullptr;
+
+    bool manualStepping_ = false;
+
+    MapModes mapMode_ = MapModes::VEGETATION;
 
     std::unordered_map<SpeciesEnum, olc::Pixel> speciesColours {
         {SpeciesEnum::Acacia, Colours::RED},
@@ -42,8 +47,10 @@ private:
 
     void drawMap();
 
+    static olc::Pixel getGradientColour(olc::Pixel lowColour, olc::Pixel highColour, float normalizedVal);
+
 public:
-    void init(Map* map, Simulator* simulator);
+    void init(Map* map, Simulator* simulator, bool stepMode);
 
 };
 

@@ -3,6 +3,7 @@
 //
 
 #include "../includes/OutputWindow.h"
+#include "../includes/Config.h"
 
 #include <map>
 
@@ -13,18 +14,54 @@ bool OutputWindow::OnUserCreate() {
     return true;
 }
 
-bool OutputWindow::OnUserUpdate(float fElapsedTime) {
-    static float accumulatedTime = 0.0f;
-    constexpr float targetFrameTime = 1.0f / 60.0f;
+bool OutputWindow::OnUserUpdate(const float fElapsedTime) {
 
-    accumulatedTime += fElapsedTime;
+    if (GetKey(olc::Key::SPACE).bPressed) {
+        if (manualStepping_) {
+            simulator_->iterate(1);
 
-    while (accumulatedTime >= targetFrameTime) {
-        simulator_->iterate(1);
-
-        accumulatedTime -= targetFrameTime;
-        drawMap();
+            drawMap();
+            return true;
+        }
     }
+
+    if (GetKey(olc::Key::N).bPressed) {
+        mapMode_ = MapModes::NITROGEN;
+
+        drawMap();
+        return true;
+    }
+
+    if (GetKey(olc::Key::V).bPressed) {
+        mapMode_ = MapModes::VEGETATION;
+
+        drawMap();
+        return true;
+    }
+
+    if (GetKey(olc::Key::M).bPressed) {
+        std::cerr << "PRESSED M" << std::endl;
+        mapMode_ = MapModes::MOISTURE;
+
+        drawMap();
+        return true;
+    }
+
+    if (!manualStepping_) {
+        static float accumulatedTime = 0.0f;
+        constexpr float targetFrameTime = 1.0f / 60.0f;
+
+        accumulatedTime += fElapsedTime;
+
+        while (accumulatedTime >= targetFrameTime) {
+            simulator_->iterate(1);
+
+            accumulatedTime -= targetFrameTime;
+            drawMap();
+        }
+        return true;
+    }
+
     return true;
 }
 
@@ -34,12 +71,42 @@ void OutputWindow::drawMap() {
             SetPixelMode(olc::Pixel::Mode::NORMAL);
             //Draw(static_cast<int32_t>(x), static_cast<int32_t>(y), terrainColours[map_->at(x, y)->terrain.getType()]);
             //SetPixelMode(olc::Pixel::Mode::ALPHA);
-            Draw(static_cast<int32_t>(x), static_cast<int32_t>(y), speciesColours[map_->at(x, y)->vegetation->getSpecies()]);
+            switch (mapMode_) {
+                case MapModes::VEGETATION: {
+                    Draw(static_cast<int32_t>(x), static_cast<int32_t>(y), speciesColours[map_->at(x, y)->vegetation->getSpecies()]);
+                    break;
+                }
+                case MapModes::NITROGEN: {
+                    const auto currentCell = map_->at(x, y).get();
+
+                    Draw(static_cast<int32_t>(x), static_cast<int32_t>(y), getGradientColour(Colours::WHITE, Colours::BLACK_VOID, currentCell->soil.getNitrate()/Config::maxSoilNitre));
+                    break;
+                }
+                case MapModes::MOISTURE: {
+                    const auto currentCell = map_->at(x, y).get();
+
+                    Draw(static_cast<int32_t>(x), static_cast<int32_t>(y), getGradientColour(Colours::WHITE, Colours::WATER_BLUE, currentCell->soil.getMoisture()/Config::floodTreshold));
+                    break;
+                }
+            }
         }
     }
 }
 
-void OutputWindow::init(Map* map, Simulator* simulator) {
+olc::Pixel OutputWindow::getGradientColour(const olc::Pixel lowColour, const olc::Pixel highColour, float normalizedVal) {
+
+    normalizedVal = std::clamp(normalizedVal, 0.0f, 1.0f);
+
+    const auto colour = olc::Pixel(static_cast<uint8_t>(lowColour.r + (highColour.r - lowColour.r) * normalizedVal),
+        static_cast<uint8_t>(lowColour.g + (highColour.g - lowColour.g) * normalizedVal),
+        static_cast<uint8_t>(lowColour.b + (highColour.b - lowColour.b) * normalizedVal),
+        static_cast<uint8_t>(lowColour.a + (highColour.a - lowColour.a) * normalizedVal));
+
+    return colour;
+}
+
+void OutputWindow::init(Map* map, Simulator* simulator, const bool stepMode) {
     map_ = map;
     simulator_ = simulator;
+    manualStepping_ = stepMode;
 }

@@ -13,6 +13,7 @@ static option long_options[] = {
     {"verbose", no_argument, nullptr, 'v'},
     {"input_file", required_argument, nullptr, 'f'},
     {"generations_to_simulate", required_argument, nullptr, 'g'},
+    {"manual_stepping", no_argument, nullptr, 'm'},
     {nullptr, 0, nullptr, 0}
 };
 
@@ -26,7 +27,7 @@ ArgParser::options_t ArgParser::parseArgs(const int argc, char *argv[]) {
 
     options_t options = {};
 
-    while ((opt = getopt_long(argc, argv, "f:g:vh", long_options, &option_index)) != -1) {
+    while ((opt = getopt_long(argc, argv, "f:g:vhm", long_options, &option_index)) != -1) {
         switch (opt) {
             case 'v':
                 options.verbose = true;
@@ -44,13 +45,16 @@ ArgParser::options_t ArgParser::parseArgs(const int argc, char *argv[]) {
                     exit(INVALID_ARGS);
                 }
                 break;
+            case 'm':
+                options.manualStepping = true;
+                break;
             case '?':
-                std::cerr << "Unknown option " << std::endl;
+                std::cerr << "Unknown option " << static_cast<char>(optopt) << std::endl;
                 printHelp(argv);
                 exit(INVALID_ARGS);
             case 'h':
             default:
-                std::cout << "Usage: " << argv[0] << " [--help -h] [--verbose -v] [--input_file -f]" << std::endl;
+                std::cout << "Usage: " << argv[0] << " [--help -h] [--verbose -v] [--input_file -f] [--manual_stepping -m]" << std::endl;
                 exit(0);
         }
     }

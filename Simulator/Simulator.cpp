@@ -14,9 +14,10 @@ void Simulator::seedFirstGeneration(const size_t numOfAcacias) {
             const size_t randX = distX(generator_);
             const size_t randY = distY(generator_);
 
-            if (map_->at(randX, randY)->terrain.isHabitable()) {
+            if (map_->at(randX, randY)->terrain.isHabitable() && map_->at(randX, randY)->terrain.getType() != TerrainTypesEnum::Field) {
                 attemptingToPlant = false;
                 map_->at(randX, randY).get()->vegetation->setSpecies(SpeciesEnum::Acacia);
+                std::cerr << "Planted an Acacia" << std::endl;
             }
         }
     }
@@ -36,10 +37,11 @@ void Simulator::runSimulation() const {
     }
 }
 
-Simulator::Simulator(std::unique_ptr<Map> map, const size_t generationsToSim)
+Simulator::Simulator(std::unique_ptr<Map> map, const size_t generationsToSim, const bool manualMode)
     : generationsToSim_(generationsToSim), map_(std::move(map)) {
     std::random_device rd;
     generator_ = std::mt19937(rd());
     outputWindow_ = std::make_unique<OutputWindow>();
-    outputWindow_->init(map_.get(), this);
+    outputWindow_->init(map_.get(), this, manualMode);
+    seedFirstGeneration(3);
 }

@@ -20,7 +20,7 @@ private:
     std::unique_ptr<OutputWindow> outputWindow_;
 
 public:
-    explicit Simulator(std::unique_ptr<Map> map, size_t generationsToSim = 0);
+    explicit Simulator(std::unique_ptr<Map> map, size_t generationsToSim, bool manualMode);
 
     void seedFirstGeneration(size_t numOfAcacias);
 

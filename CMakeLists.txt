@@ -34,6 +34,7 @@ add_executable(IMS
         includes/Colours.h
         includes/Colours.h
         includes/Colours.h
+        includes/MapModeEnum.h
 )
 
 target_link_libraries(IMS

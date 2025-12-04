@@ -13,6 +13,7 @@ private:
     typedef struct Options {
         std::string input_file;
         bool verbose;
+        bool manualStepping;
         size_t gens;
     } options_t;
 
