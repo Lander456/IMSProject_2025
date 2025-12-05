@@ -13,8 +13,8 @@ struct Config {
 
     /* == CELLS CONFIG == */
     static constexpr double floodTreshold = 0.7;
-    static constexpr double floodNitreTransferedPercentage = 0.5;
-    static constexpr double floodMoistureTransferedPercentage = 0.5;
+    static constexpr double floodNitreTransferedPercentage = 0.0;
+    static constexpr double floodMoistureTransferedPercentage = 0.0;
     static constexpr double passiveNitreGain = 0.1;
     static constexpr double maxSoilNitre = 2.0;
     static constexpr double maxSoilShade = 2.0;
@@ -45,7 +45,7 @@ struct Config {
 
     //water
     static constexpr int waterMoisturizationRange = 3;
-    static constexpr int waterMoisturizationAmmount = 0.1; //note: water effect will overlap -> small value
+    static constexpr double waterMoisturizationAmmount = 0.01; //note: water effect will overlap -> small value
 
     /* == VEGETATION CONFIG == */
     static constexpr double staticGrowRate = 0.5;
