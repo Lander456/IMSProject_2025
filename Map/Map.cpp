@@ -42,7 +42,7 @@ void Map::setUp(){
 void Map::iterate() {
 
     //call rain 
-    iterationsSinceRain++;
+    /*iterationsSinceRain++;
     if(expEvent(Config::rainInterval, iterationsSinceRain))
     {
         for(auto& xRow : grid){
@@ -53,7 +53,7 @@ void Map::iterate() {
         }
         iterationsSinceRain = 0;
     }
-
+    */
     //call fertilisation
     iterationsSinceFertilisation++;
     if(iterationsSinceFertilisation >= Config::fieldFertilisingInterval)
@@ -61,11 +61,12 @@ void Map::iterate() {
         for(auto& xRow : grid){
             for(auto& cellPtr : xRow){
                 Cell* c = cellPtr.get();
-                c->OnRain();
+                c->Fertilise();
             }
         }
         iterationsSinceFertilisation = 0;
     }
+
 
     //update soil cycle
     for(auto& xRow : grid){

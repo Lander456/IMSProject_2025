@@ -21,7 +21,7 @@ struct Config {
 
     //dirt
     static constexpr double dirtMoisture = 0.5;     
-    static constexpr double dirtMoistureDecayRate = 0.8;
+    static constexpr double dirtMoistureDecayRate = 1.0;
     static constexpr double dirtNitre = 0.5;
     static constexpr double dirtNitreDecayRate = 0.8;
 
@@ -29,7 +29,7 @@ struct Config {
 
     //gravel
     static constexpr double gravelMoisture = 0.1;
-    static constexpr double gravelMoistureDecayRate = 0.5;
+    static constexpr double gravelMoistureDecayRate = 1.0;
     static constexpr double gravelNitre = 0.3;
     static constexpr double gravelNitreDecayRate = 0.8;
 
@@ -37,7 +37,7 @@ struct Config {
 
     //field
     static constexpr double fieldMoisture = 0.6;
-    static constexpr double fieldMoistureDecayRate = 0.9;
+    static constexpr double fieldMoistureDecayRate = 1.0;
     static constexpr double fieldNitre = 0.7;
     static constexpr double fieldNitreDecayRate = 0.85;
 
@@ -55,7 +55,7 @@ struct Config {
     static constexpr double defaultSpreadChance = 0.2;
     
     //Acacia
-    static constexpr double extraNitrateFactor = 0.05;
+    static constexpr double extraNitrateFactor = 0.2;
 
     static constexpr double acaciaGrowthRate     = 0.75; 
     static constexpr double acaciaNitrogenBonus  = 1.6;

@@ -28,6 +28,7 @@ private:
 
 public:
     Map(size_t w, size_t h);
+    Map(const Map& other);
 
     [[nodiscard]] std::unique_ptr<Cell>& at(size_t x, size_t y);
 

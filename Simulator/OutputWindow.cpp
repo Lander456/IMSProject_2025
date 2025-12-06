@@ -17,8 +17,9 @@ bool OutputWindow::OnUserCreate() {
 bool OutputWindow::OnUserUpdate(const float fElapsedTime) {
 
     if (GetKey(olc::Key::SPACE).bPressed) {
-        if (manualStepping_) {
+        if (manualStepping_ && (simulator_->generationsSimulated_ < simulator_->generationsToSim_) || simulator_->generationsToSim_ == -1) {
             simulator_->iterate(1);
+            simulator_->generationsSimulated_++;
 
             drawMap();
             return true;
@@ -46,7 +47,11 @@ bool OutputWindow::OnUserUpdate(const float fElapsedTime) {
         return true;
     }
 
-    if (!manualStepping_) {
+    if (GetKey(olc::Key::R).bPressed && resetMsgShown_) {
+        simulator_->resetSim();
+    }
+
+    if (!manualStepping_ && (simulator_->generationsSimulated_ < simulator_->generationsToSim_) || simulator_->generationsToSim_ == -1) {
         static float accumulatedTime = 0.0f;
         constexpr float targetFrameTime = 1.0f / 60.0f;
 
@@ -54,11 +59,18 @@ bool OutputWindow::OnUserUpdate(const float fElapsedTime) {
 
         while (accumulatedTime >= targetFrameTime) {
             simulator_->iterate(1);
+            simulator_->generationsSimulated_++;
 
             accumulatedTime -= targetFrameTime;
             drawMap();
         }
         return true;
+    }
+
+    if (simulator_->generationsSimulated_ == simulator_->generationsToSim_ && !resetMsgShown_) {
+        resetMsgShown_ = true;
+
+        std::cout << "Simulation finished, to reset the simulation press R!" << std::endl;
     }
 
     return true;

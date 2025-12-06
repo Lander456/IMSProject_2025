@@ -14,7 +14,8 @@ private:
         std::string input_file;
         bool verbose;
         bool manualStepping;
-        size_t gens;
+        ssize_t gens = -1;
+        size_t numOfAcacias;
     } options_t;
 
     static void printHelp(char *argv[]);

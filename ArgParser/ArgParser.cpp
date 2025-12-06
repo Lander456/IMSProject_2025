@@ -14,11 +14,12 @@ static option long_options[] = {
     {"input_file", required_argument, nullptr, 'f'},
     {"generations_to_simulate", required_argument, nullptr, 'g'},
     {"manual_stepping", no_argument, nullptr, 'm'},
+    {"number_of_acacias", required_argument, nullptr, 'a'},
     {nullptr, 0, nullptr, 0}
 };
 
 void ArgParser::printHelp(char *argv[]) {
-    std::cout << "Usage: " << argv[0] << " [--help -h] [--verbose -v] [--input_file -f]" << std::endl;
+    std::cout << "Usage: " << argv[0] << " [--help -h] [--verbose -v] [--input_file -f] [--manual_stepping -m] [--number_of_acacias -a]" << std::endl;
 }
 
 ArgParser::options_t ArgParser::parseArgs(const int argc, char *argv[]) {
@@ -27,7 +28,8 @@ ArgParser::options_t ArgParser::parseArgs(const int argc, char *argv[]) {
 
     options_t options = {};
 
-    while ((opt = getopt_long(argc, argv, "f:g:vhm", long_options, &option_index)) != -1) {
+    while ((opt = getopt_long(argc, argv, "f:g:a:vhm", long_options, &option_index)) != -1) {
+        char* end;
         switch (opt) {
             case 'v':
                 options.verbose = true;
@@ -37,7 +39,6 @@ ArgParser::options_t ArgParser::parseArgs(const int argc, char *argv[]) {
                 break;
             case 'g':
                 errno = 0;
-                char* end;
                 options.gens = std::strtol(optarg, &end, 10);
 
                 if (errno == ERANGE || *end != '\0' || options.gens <= 0) {
@@ -48,19 +49,34 @@ ArgParser::options_t ArgParser::parseArgs(const int argc, char *argv[]) {
             case 'm':
                 options.manualStepping = true;
                 break;
+            case 'a':
+                errno = 0;
+                options.numOfAcacias = std::strtol(optarg, &end, 10);
+
+                if (errno == ERANGE || *end != '\0' || options.numOfAcacias <= 0) {
+                    std::cerr << "Invalid number of acacias to be planted in the simulation, please enter a non-negative number" << std::endl;
+                    exit(INVALID_ARGS);
+                }
+                break;
             case '?':
                 std::cerr << "Unknown option " << static_cast<char>(optopt) << std::endl;
                 printHelp(argv);
                 exit(INVALID_ARGS);
             case 'h':
             default:
-                std::cout << "Usage: " << argv[0] << " [--help -h] [--verbose -v] [--input_file -f] [--manual_stepping -m]" << std::endl;
+                printHelp(argv);
                 exit(0);
         }
     }
 
     if (options.input_file.empty()) {
         std::cerr << "No input file given" << std::endl;
+        printHelp(argv);
+        exit(INVALID_ARGS);
+    }
+
+    if (options.numOfAcacias == 0) {
+        std::cerr << "No number of acacias given" << std::endl;
         printHelp(argv);
         exit(INVALID_ARGS);
     }

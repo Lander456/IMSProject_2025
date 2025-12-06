@@ -20,7 +20,7 @@ int main (int argc, char *argv[]) {
         std::cout << "Parsed input" << std::endl;
     }
     auto map = mapParser.parseMap();
-    auto simulator = Simulator(std::move(map), options.gens, options.manualStepping);
+    auto simulator = Simulator(std::move(map), options.gens, options.manualStepping, options.numOfAcacias);
 
     simulator.runSimulation();
 }

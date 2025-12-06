@@ -23,6 +23,8 @@ private:
 
     bool manualStepping_ = false;
 
+    bool resetMsgShown_ = false;
+
     MapModes mapMode_ = MapModes::VEGETATION;
 
     std::unordered_map<SpeciesEnum, olc::Pixel> speciesColours {

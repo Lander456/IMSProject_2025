@@ -14,19 +14,25 @@ class OutputWindow;
 
 class Simulator {
 private:
-    size_t generationsToSim_;
     std::unique_ptr<Map> map_;
     std::mt19937 generator_;
     std::unique_ptr<OutputWindow> outputWindow_;
+    std::vector<std::pair<size_t, size_t>> acaciaCoords;
 
 public:
-    explicit Simulator(std::unique_ptr<Map> map, size_t generationsToSim, bool manualMode);
+    size_t generationsToSim_;
+    size_t generationsSimulated_;
+    size_t numOfAcacias_ = 0;
+
+    explicit Simulator(std::unique_ptr<Map> map, ssize_t generationsToSim, bool manualMode, size_t numOfAcacias);
 
     void seedFirstGeneration(size_t numOfAcacias);
 
-    void iterate(size_t numOfIterations) const;
+    void iterate(ssize_t numOfIterations) const;
 
     void runSimulation() const;
+
+    void resetSim();
 };
 
 
