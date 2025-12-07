@@ -78,7 +78,7 @@ void Vegetation::Iterate(HabitableCell* cell){
     if(growFactor > 0 && biomass >= info.minimalSpreadBiomass){
         for(auto c : cell->cellsInRange){
             if(!c) continue;
-            if(c->terrain.isHabitable() && c->vegetation->isEmpty() &&  c->terrain.getType() != TerrainTypesEnum::Field){ 
+            if(c->terrain.isHabitable() && c->vegetation->isEmpty() && c->soil.getNitrate() < info.nitreMaxTolerance && c->terrain.getType() != TerrainTypesEnum::Field){ 
                 double roll = static_cast<double>(rand() / static_cast<double>(RAND_MAX));
                 if(roll <= Config::defaultSpreadChance * info.spreadModifier){ //succes on spread chance
                     c->vegetation->setSpecies(species);

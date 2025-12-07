@@ -87,7 +87,38 @@ void OutputWindow::drawMap() {
             SetPixelMode(olc::Pixel::Mode::NORMAL);
             switch (mapMode_) {
                 case MapModes::VEGETATION: {
-                    Draw(static_cast<int32_t>(x), static_cast<int32_t>(y), speciesColours[map_->at(x, y)->vegetation->getSpecies()]);
+                    auto cell = map_->at(x, y).get();
+                    switch (cell->terrain.getType())
+                    {
+                    case TerrainTypesEnum::Dirt :
+                        if(cell->vegetation.get()->isEmpty()){
+                            Draw(static_cast<int32_t>(x), static_cast<int32_t>(y), Colours::DIRT_BROWN);
+                        }
+                        else{
+                            Draw(static_cast<int32_t>(x), static_cast<int32_t>(y), speciesColours[map_->at(x, y)->vegetation->getSpecies()]);
+                        }
+                        break;
+                    case TerrainTypesEnum::Gravel :
+                        if(cell->vegetation.get()->isEmpty()){
+                            Draw(static_cast<int32_t>(x), static_cast<int32_t>(y), Colours::GRAVEL_GREY);
+                        }
+                        else{
+                            Draw(static_cast<int32_t>(x), static_cast<int32_t>(y), speciesColours[map_->at(x, y)->vegetation->getSpecies()]);
+                        }
+                        break;
+                    case TerrainTypesEnum::Field :
+                        Draw(static_cast<int32_t>(x), static_cast<int32_t>(y), Colours::FIELD_YELLOW);
+                        break;
+                    case TerrainTypesEnum::Water :
+                        Draw(static_cast<int32_t>(x), static_cast<int32_t>(y), Colours::WATER_BLUE);
+                        break;
+                    case TerrainTypesEnum::Rock :
+                        Draw(static_cast<int32_t>(x), static_cast<int32_t>(y), Colours::ROCK_GREY);
+                        break;
+                    default:
+                        Draw(static_cast<int32_t>(x), static_cast<int32_t>(y), Colours::WHITE);
+                        break;
+                    }
                     break;
                 }
                 case MapModes::NITROGEN: {

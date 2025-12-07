@@ -17,7 +17,7 @@ namespace Colours {
     static const olc::Pixel TREE_GREEN {8, 94, 21, 128};
 
     //Terrain colours
-    static const olc::Pixel DIRT_BROWN {181, 78, 0, 255};
+    static const olc::Pixel DIRT_BROWN {161, 146, 133, 255};
     static const olc::Pixel FIELD_YELLOW {242, 211, 36, 255};
     static const olc::Pixel GRAVEL_GREY {92, 92, 89, 255};
     static const olc::Pixel ROCK_GREY {23, 23, 23, 255};

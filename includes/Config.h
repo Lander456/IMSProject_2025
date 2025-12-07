@@ -50,11 +50,11 @@ struct Config {
 
 
     //water
-    static constexpr int waterMoisturizationRange = 3;
-    static constexpr double waterMoisturizationAmmount = 0.1; //note: water effect will overlap -> small value
+    static constexpr int waterMoisturizationRange = 8;
+    static constexpr double waterMoisturizationAmmount = 0.01; //note: water effect will overlap -> small value
 
     /* == VEGETATION CONFIG == */
-    static constexpr double staticGrowRate = 1.0;
+    static constexpr double staticGrowRate = 0.001;
     static constexpr double shadeWitherFactor = 50.0;
     static constexpr double nitreWitherFactor = 100.0;
     static constexpr double defaultSpreadChance = 0.2;
@@ -62,7 +62,7 @@ struct Config {
     //Acacia
     static constexpr double acaciaExtraNitrate= 0.003;
 
-    static constexpr double acaciaGrowthRate     = 0.75; 
+    static constexpr double acaciaGrowthRate     = 2.0; 
     static constexpr double acaciaNitrogenBonus  = 1.6;
     static constexpr double acaciaShadeTolerance = 0.4;
     static constexpr double acaciaShadeCreated   = 0.7;
@@ -73,7 +73,7 @@ struct Config {
     static constexpr double acaciaNitreMaxTolerance    = 10.0;
    
     //Shrub
-    static constexpr double shrubGrowthRate     = 0.5;
+    static constexpr double shrubGrowthRate     = 1.5;
     static constexpr double shrubNitrogenBonus  = 1.15;
     static constexpr double shrubShadeTolerance = 0.5;
     static constexpr double shrubShadeCreated   = 0.4;
@@ -84,7 +84,7 @@ struct Config {
     static constexpr double shrubNitreMaxTolerance      = 1.088;
 
     //Grass
-    static constexpr double grassGrowthRate     = 1.0;             
+    static constexpr double grassGrowthRate     = 4.0;             
     static constexpr double grassNitrogenBonus  = 1.05;
     static constexpr double grassShadeTolerance = 0.2;
     static constexpr double grassShadeCreated   = 0.0;
@@ -96,7 +96,7 @@ struct Config {
 
     //Trees
     static constexpr double treeBaseBiomas      = 18.0;
-    static constexpr double treeGrowthRate      = 0.25;
+    static constexpr double treeGrowthRate      = 0.8;
     static constexpr double treeNitrogenBonus   = 1.1;
     static constexpr double treeShadeTolerance  = 0.8;
     static constexpr double treeShadeCreated    = 0.9;
