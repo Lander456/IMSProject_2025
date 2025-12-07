@@ -96,7 +96,8 @@ void Map::iterate() {
     
 }
 
-bool Map::expEvent(size_t averageRate, size_t iterationNumber){
+//called every rainInterval intervals, returns 3.15 on average
+double getRainAmmount(){
 
     double roll = static_cast<double>(rand() / static_cast<double>(RAND_MAX));
     double threshold = 1.0 - exp( -static_cast<double>(iterationNumber) / static_cast<double>(averageRate));
