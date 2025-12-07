@@ -40,10 +40,10 @@ std::unique_ptr<Map> MapParser::parseMap() {
     std::mt19937 gen(rd());
     std::uniform_real_distribution dist(0.0f, 1.0f);
 
-    for (int y = 0; y < lines.size(); y++) {
+    for (size_t y = 0; y < lines.size(); y++) {
         std::string& line = lines[y];
 
-        for (int x = 0; x < map->getWidth(); x++) {
+        for (size_t x = 0; x < map->getWidth(); x++) {
 
             auto terrain = Terrain(TerrainLegend.at(line[x]));
             const auto vegetation = Vegetation(SpeciesLegend.at(line[x]), dist(gen));
@@ -73,9 +73,7 @@ std::unique_ptr<Map> MapParser::parseMap() {
             }
         }
     }
-    std::cout << "Map seed done" << std::endl;
     map->setUp();
-    std::cout << "Map setup done" << std::endl;
     return map;
 
 }

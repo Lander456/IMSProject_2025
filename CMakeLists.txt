@@ -10,12 +10,10 @@ add_executable(IMS
         includes/SpeciesInfo.h
         Species/SpeciesRegistry.cpp
         includes/SpeciesRegistry.h
-        Cell/Soil.cpp
         includes/Soil.h
         Cell/Vegetation.cpp
         includes/Vegetation.h
         includes/TerrainTypesEnum.h
-        Cell/Terrain.cpp
         includes/Terrain.h
         Cell/Cell.cpp
         includes/Cell.h

@@ -8,19 +8,11 @@
 
 int main (int argc, char *argv[]) {
 
-    auto options = ArgParser::parseArgs(argc, argv);
-
-    if (options.verbose) {
-        std::cout << "Parsing input file: " << options.input_file << std::endl;
-    }
-
+    const auto options = ArgParser::parseArgs(argc, argv);
     auto mapParser = MapParser(options.input_file);
-
-    if (options.verbose) {
-        std::cout << "Parsed input" << std::endl;
-    }
     auto map = mapParser.parseMap();
-    auto simulator = Simulator(std::move(map), options.gens, options.manualStepping);
+    map->setFertilization(options.fertilization);
+    const auto simulator = Simulator(std::move(map), options.gens, options.manualStepping, options.numOfAcacias);
 
     simulator.runSimulation();
 }

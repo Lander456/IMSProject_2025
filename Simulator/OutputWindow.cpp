@@ -18,7 +18,7 @@ bool OutputWindow::OnUserUpdate(const float fElapsedTime) {
 
     if (GetKey(olc::Key::SPACE).bPressed) {
         if (manualStepping_) {
-            simulator_->iterate(iterationSteps);
+            simulator_->iterate(iterationSteps_);
             
             drawMap();
             return true;
@@ -26,21 +26,21 @@ bool OutputWindow::OnUserUpdate(const float fElapsedTime) {
     }
 
     if (GetKey(olc::Key::F).bPressed){
-        iterationSteps++;
-        if(iterationSteps >= 10) iterationSteps = 10;
+        iterationSteps_++;
+        if(iterationSteps_ >= 10) iterationSteps_ = 10;
     }
     if (GetKey(olc::Key::S).bPressed){
-        iterationSteps--;
-        if(iterationSteps <= 0) iterationSteps = 1;
+        iterationSteps_--;
+        if(iterationSteps_ <= 0) iterationSteps_ = 1;
     }
 
-    if (GetKey(olc::Key::NP1).bPressed) iterationSteps = 1;
+    if (GetKey(olc::Key::NP1).bPressed) iterationSteps_ = 1;
 
-    if (GetKey(olc::Key::NP2).bPressed) iterationSteps = 2;
+    if (GetKey(olc::Key::NP2).bPressed) iterationSteps_ = 2;
 
-    if (GetKey(olc::Key::NP3).bPressed) iterationSteps = 3;
+    if (GetKey(olc::Key::NP3).bPressed) iterationSteps_ = 3;
 
-    if (GetKey(olc::Key::NP4).bPressed) iterationSteps = 4;
+    if (GetKey(olc::Key::NP4).bPressed) iterationSteps_ = 4;
 
     if (GetKey(olc::Key::N).bPressed) {
         mapMode_ = MapModes::NITROGEN;
@@ -70,10 +70,16 @@ bool OutputWindow::OnUserUpdate(const float fElapsedTime) {
         accumulatedTime += fElapsedTime;
 
         while (accumulatedTime >= targetFrameTime) {
-            simulator_->iterate(iterationSteps);
+            if (simulator_->generationsSimulated_ < simulator_->generationsToSim_) {
+                simulator_->iterate(iterationSteps_);
 
-            accumulatedTime -= targetFrameTime;
-            drawMap();
+                accumulatedTime -= targetFrameTime;
+                drawMap();
+                simulator_->generationsSimulated_++;
+            } else if (!endMessageShown_) {
+                endMessageShown_ = true;
+                std::cout << "Simulation finished, showing final generation!" << std::endl;
+            }
         }
         return true;
     }
@@ -91,19 +97,17 @@ void OutputWindow::drawMap() {
                     switch (cell->terrain.getType())
                     {
                     case TerrainTypesEnum::Dirt :
-                        if(cell->vegetation.get()->isEmpty()){
+                        if(cell->vegetation->isEmpty()){
                             Draw(static_cast<int32_t>(x), static_cast<int32_t>(y), Colours::DIRT_BROWN);
-                        }
-                        else{
-                            Draw(static_cast<int32_t>(x), static_cast<int32_t>(y), speciesColours[map_->at(x, y)->vegetation->getSpecies()]);
+                        } else {
+                            Draw(static_cast<int32_t>(x), static_cast<int32_t>(y), speciesColours_[map_->at(x, y)->vegetation->getSpecies()]);
                         }
                         break;
                     case TerrainTypesEnum::Gravel :
-                        if(cell->vegetation.get()->isEmpty()){
+                        if(cell->vegetation->isEmpty()){
                             Draw(static_cast<int32_t>(x), static_cast<int32_t>(y), Colours::GRAVEL_GREY);
-                        }
-                        else{
-                            Draw(static_cast<int32_t>(x), static_cast<int32_t>(y), speciesColours[map_->at(x, y)->vegetation->getSpecies()]);
+                        } else {
+                            Draw(static_cast<int32_t>(x), static_cast<int32_t>(y), speciesColours_[map_->at(x, y)->vegetation->getSpecies()]);
                         }
                         break;
                     case TerrainTypesEnum::Field :

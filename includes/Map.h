@@ -16,12 +16,11 @@ class Cell;
 
 class Map {
 private:
-    size_t iterationsSinceRain;
-
-    size_t iterationsSinceFertilisation;
-
-    size_t width, height;
-
+    bool fertilization_;
+    size_t iterationsSinceRain{};
+    size_t iterationsSinceFertilisation{};
+    size_t width;
+    size_t height;
     std::vector<std::vector<std::unique_ptr<Cell>>> grid;
 
     bool expEvent(size_t averageRate, size_t iterationNumber);
@@ -34,6 +33,7 @@ public:
 
     [[nodiscard]] size_t getWidth() const { return width; }
     [[nodiscard]] size_t getHeight() const { return height; }
+    void setFertilization(bool fertilization);
 
     void iterate();
     //called after seeding map grid to connect cells

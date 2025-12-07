@@ -14,17 +14,16 @@ class OutputWindow;
 
 class Simulator {
 private:
-    
-
-    size_t generationsToSim_;
     std::unique_ptr<Map> map_;
     std::mt19937 generator_;
     std::unique_ptr<OutputWindow> outputWindow_;
 
 public:
+    size_t generationsToSim_;
+    size_t generationsSimulated_;
     size_t iterationNumber = 0;
 
-    explicit Simulator(std::unique_ptr<Map> map, size_t generationsToSim, bool manualMode);
+    explicit Simulator(std::unique_ptr<Map> map, size_t generationsToSim, bool manualMode, size_t numOfAcacias);
 
     void seedFirstGeneration(size_t numOfAcacias);
 

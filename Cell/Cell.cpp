@@ -9,23 +9,19 @@
 
 /* == CELL == */
 Cell::Cell(Map& map, int x, int y, TerrainTypesEnum terainType)
-    : map_(map), gridX_(x), gridY_(y), terrain(terainType), soil(0.0,0.0), vegetation(std::make_unique<Vegetation>()), shade(0.0) {}
+    : gridX_(x), gridY_(y), map_(map), terrain(terainType), soil(0.0,0.0), vegetation(std::make_unique<Vegetation>()), shade(0.0) {}
 
-void Cell::Iterate(IterationPhase phase) {
-    return;
+void Cell::Iterate(const IterationPhase phase) {
+    static_cast<void>(phase);
 }
 
-void Cell::Fertilise() {
-    return;
+void Cell::Fertilise() {}
+
+void Cell::OnRain(const double ammountRained) {
+    static_cast<void>(ammountRained);
 }
 
-void Cell::OnRain(double ammountRained) {
-    return;
-}
-
-void Cell::SetUp(){
-    return;
-}
+void Cell::SetUp(){}
 
 /* == HABITABLE CELL == */
 //shared logic for Dirt, Gravel and Field -> flooding, finding neighbor to nearest water
@@ -38,9 +34,7 @@ void HabitableCell::SetUp(){
     cellsInRange = map_.getCellsInRadius(gridX_, gridY_, 1);
 }
 
-void HabitableCell::CheckForFlooding() {
-    return;
-}
+void HabitableCell::CheckForFlooding() {}
 
 /* == DIRT CELL == */
 DirtCell::DirtCell(Map &map, int x, int y)
@@ -49,7 +43,7 @@ DirtCell::DirtCell(Map &map, int x, int y)
     soil.addNitrate(Config::dirtNitre);
 }
 
-void DirtCell::Iterate(IterationPhase phase) {
+void DirtCell::Iterate(const IterationPhase phase) {
 
     switch (phase)
     {
@@ -87,9 +81,9 @@ void DirtCell::CheckForFlooding(){
             return;
         }
 
-        double moistureFlooded = soil.getMoisture() - Config::dirtFC;
-        double floodedPercentage = moistureFlooded / soil.getMoisture();
-        double nitreFlooded = soil.getNitrate() * floodedPercentage * Config::nitrePercentageOnFlood;
+        const double moistureFlooded = soil.getMoisture() - Config::dirtFC;
+        const double floodedPercentage = moistureFlooded / soil.getMoisture();
+        const double nitreFlooded = soil.getNitrate() * floodedPercentage * Config::nitrePercentageOnFlood;
 
         if(floodDirectionCell_->terrain.getType() != TerrainTypesEnum::Water){
             floodDirectionCell_->incomingSoilChanges.first += (moistureFlooded);
@@ -141,9 +135,9 @@ void GravelCell::CheckForFlooding(){
             return;
         }
 
-        double moistureFlooded = soil.getMoisture() - Config::gravelFC;
-        double floodedPercentage = moistureFlooded / soil.getMoisture();
-        double nitreFlooded = soil.getNitrate() * floodedPercentage * Config::nitrePercentageOnFlood;
+        const double moistureFlooded = soil.getMoisture() - Config::gravelFC;
+        const double floodedPercentage = moistureFlooded / soil.getMoisture();
+        const double nitreFlooded = soil.getNitrate() * floodedPercentage * Config::nitrePercentageOnFlood;
 
         if(floodDirectionCell_->terrain.getType() != TerrainTypesEnum::Water){
             floodDirectionCell_->incomingSoilChanges.first += (moistureFlooded);
@@ -221,6 +215,8 @@ void WaterCell::SetUp(){
 }
 
 void WaterCell::Iterate(IterationPhase phase) {
+
+    static_cast<void>(phase);
 
     for(const auto& c : cellsInRange_){
         if(!c) continue;

@@ -17,16 +17,14 @@ class Simulator;
 
 class OutputWindow : public olc::PixelGameEngine {
 private:
-    size_t iterationSteps = 1;
+    size_t endMessageShown_ = false;
+    size_t iterationSteps_ = 1;
     Map* map_ = nullptr;
-
     Simulator* simulator_ = nullptr;
-
     bool manualStepping_ = false;
-
     MapModes mapMode_ = MapModes::VEGETATION;
 
-    std::unordered_map<SpeciesEnum, olc::Pixel> speciesColours {
+    std::unordered_map<SpeciesEnum, olc::Pixel> speciesColours_ {
         {SpeciesEnum::Acacia, Colours::RED},
         {SpeciesEnum::Grass, Colours::GRASS_GREEN},
         {SpeciesEnum::NoSpecies, Colours::DIRT_BROWN},
@@ -34,7 +32,7 @@ private:
         {SpeciesEnum::Trees, Colours::TREE_GREEN}
     };
 
-    std::unordered_map<TerrainTypesEnum, olc::Pixel> terrainColours {
+    std::unordered_map<TerrainTypesEnum, olc::Pixel> terrainColours_ {
         {TerrainTypesEnum::Dirt, olc::Pixel(181, 78, 0, 255)},
         {TerrainTypesEnum::Field, olc::Pixel(242, 211, 36, 255)},
         {TerrainTypesEnum::Gravel, olc::Pixel(92, 92, 89, 255)},

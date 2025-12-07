@@ -12,7 +12,8 @@ class ArgParser {
 private:
     typedef struct Options {
         std::string input_file;
-        bool verbose;
+        size_t numOfAcacias = 3;
+        bool fertilization = true;
         bool manualStepping;
         size_t gens;
     } options_t;

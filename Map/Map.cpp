@@ -11,7 +11,7 @@
 
 #include "../includes/SpeciesRegistry.h"
 
-Map::Map(const size_t w, const size_t h) : width(w), height(h) {
+Map::Map(const size_t w, const size_t h) : fertilization_(true), width(w), height(h) {
     grid.resize(h);
     for (auto& row : grid) {
         row.resize(width);
@@ -24,7 +24,6 @@ std::unique_ptr<Cell>& Map::at(const size_t x, const size_t y) {
 
 
 void Map::setUp(){
-    std::cerr << "Beggining setup" << std::endl;
     SpeciesRegistry::initializeSpeciesRegistry();
     int line = 0;
     int col = 0;
@@ -39,13 +38,16 @@ void Map::setUp(){
     }
 }
 
+void Map::setFertilization(const bool fertilization) {
+    fertilization_ = fertilization;
+}
+
 void Map::iterate() {
 
     //call flood rain 
     iterationsSinceRain++;
     if(iterationsSinceRain >= Config::rainInterval)
     {
-        std::cout << "Flooding" << std::endl;
         double ammount = getRainAmmount();
         for(auto& xRow : grid){
             for(auto& cellPtr : xRow){
@@ -61,19 +63,21 @@ void Map::iterate() {
     }
 
     //call fertilisation
-    iterationsSinceFertilisation++;
-    if(iterationsSinceFertilisation >= Config::fieldFertilisingInterval)
-    {
-        for(auto& xRow : grid){
-            for(auto& cellPtr : xRow){
-                Cell* c = cellPtr.get();
-                c->Fertilise();
+    if (fertilization_) {
+        iterationsSinceFertilisation++;
+        if(iterationsSinceFertilisation >= Config::fieldFertilisingInterval)
+        {
+            for(auto& xRow : grid){
+                for(auto& cellPtr : xRow){
+                    Cell* c = cellPtr.get();
+                    c->Fertilise();
+                }
             }
+            iterationsSinceFertilisation = 0;
         }
-        iterationsSinceFertilisation = 0;
     }
 
-    for(int i=0; i< Config::floodDrainageSpeed; i++){
+    for(size_t i = 0; i < Config::floodDrainageSpeed; i++){
         //simulate flood water transfer
         for(auto& xRow : grid){
             for(auto& cellPtr : xRow){
