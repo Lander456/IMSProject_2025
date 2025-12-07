@@ -60,7 +60,7 @@ struct Config {
     static constexpr double defaultSpreadChance = 0.2;
     
     //Acacia
-    static constexpr double acaciaExtraNitrate= 0.003;
+    static constexpr double acaciaExtraNitrate= 0.022; // is 0.003 nitre for 4 year old acacia
 
     static constexpr double acaciaGrowthRate     = 2.0; 
     static constexpr double acaciaNitrogenBonus  = 1.6;
