@@ -41,14 +41,20 @@ void Map::setUp(){
 
 void Map::iterate() {
 
-    //call rain 
+    //call flood rain 
     iterationsSinceRain++;
-    if(expEvent(Config::rainInterval, iterationsSinceRain))
+    if(iterationsSinceRain >= Config::rainInterval)
     {
+        std::cout << "Flooding" << std::endl;
+        double ammount = getRainAmmount();
         for(auto& xRow : grid){
             for(auto& cellPtr : xRow){
+
+                //between -0.5 and 0.5
+                double randomStatic = (static_cast<double>(rand()) / static_cast<double>(RAND_MAX)) - 0.5;
+               
                 Cell* c = cellPtr.get();
-                c->OnRain();
+                c->OnRain(ammount + (ammount* 0.2 * randomStatic));
             }
         }
         iterationsSinceRain = 0;
@@ -61,11 +67,35 @@ void Map::iterate() {
         for(auto& xRow : grid){
             for(auto& cellPtr : xRow){
                 Cell* c = cellPtr.get();
-                c->OnRain();
+                c->Fertilise();
             }
         }
         iterationsSinceFertilisation = 0;
     }
+
+    for(int i=0; i< Config::floodDrainageSpeed; i++){
+        //simulate flood water transfer
+        for(auto& xRow : grid){
+            for(auto& cellPtr : xRow){
+                Cell* c = cellPtr.get();
+                c->Iterate(IterationPhase::Flood);
+            }
+        }
+        
+        //update flood changes
+        for(auto& xRow : grid){
+            for(auto& cellPtr : xRow){
+                Cell* c = cellPtr.get();
+                
+                //update soil
+                c->soil.addMoisture(c->incomingSoilChanges.first);
+                c->soil.addNitrate(c->incomingSoilChanges.second);
+                c->incomingSoilChanges = {0.0,0.0};
+            }
+        }
+    }
+
+    
 
     //update soil cycle
     for(auto& xRow : grid){
@@ -74,18 +104,7 @@ void Map::iterate() {
             c->Iterate(IterationPhase::Soil);
         }
     }
-    //update flood changes and calculate shade
-    for(auto& xRow : grid){
-        for(auto& cellPtr : xRow){
-            Cell* c = cellPtr.get();
-
-            //update soil
-            c->soil.addMoisture(c->incomingSoilChanges.first);
-            c->soil.addNitrate(c->incomingSoilChanges.second);
-            c->incomingSoilChanges = {0.0,0.0};
-        }
-    }
-
+    
     //update vegetation
     for(auto& xRow : grid){
         for(auto& cellPtr : xRow){
@@ -96,13 +115,20 @@ void Map::iterate() {
     
 }
 
-//called every rainInterval intervals, returns 3.15 on average
-double getRainAmmount(){
+bool Map::expEvent(size_t averageRate, size_t iterationNumber){
 
-    double roll = static_cast<double>(rand() / static_cast<double>(RAND_MAX));
+    double roll = static_cast<double>(rand()) / static_cast<double>(RAND_MAX);
     double threshold = 1.0 - exp( -static_cast<double>(iterationNumber) / static_cast<double>(averageRate));
     return((roll < threshold));
 
+}
+
+//returns random value between rainAddedMoistureMin and rainAddedMoistureMax
+double Map::getRainAmmount(){
+
+    double roll = static_cast<double>(rand() / static_cast<double>(RAND_MAX));
+    double ammount = Config::rainAddedMoistureMin + roll * (Config::rainAddedMoistureMax - Config::rainAddedMoistureMin);
+    return ammount;
 }
 
 std::vector<Cell*> Map::getCellsInRadius(const int cellX, const int cellY, const int radius) {

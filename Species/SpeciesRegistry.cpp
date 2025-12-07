@@ -18,9 +18,6 @@ void SpeciesRegistry::initializeSpeciesRegistry(){
         Config::acaciaShadeCreated,
         Config::acaciaSpreadModifier,
         Config::acaciaMaxHeight,
-        Config::acaciaMoistureMinTolerance,
-        Config::acaciaMoistureMaxTolerance,
-        Config::acaciaNitreMinTolerance,
         Config::acaciaNitreMaxTolerance,
         Config::acaciaSpreadBiomass
     };
@@ -32,9 +29,6 @@ void SpeciesRegistry::initializeSpeciesRegistry(){
         Config::shrubShadeCreated,
         Config::shrubSpreadModifier,
         Config::shrubMaxHeight,
-        Config::shrubMoistureMinTolerance,
-        Config::shrubMoistureMaxTolerance,
-        Config::shrubNitreMinTolerance,
         Config::shrubNitreMaxTolerance,
         Config::shrubSpreadBiomass
     };
@@ -46,9 +40,6 @@ void SpeciesRegistry::initializeSpeciesRegistry(){
         Config::grassShadeCreated,
         Config::grassSpreadModifier,
         Config::grassMaxHeight,
-        Config::grassMoistureMinTolerance,
-        Config::grassMoistureMaxTolerance,
-        Config::grassNitreMinTolerance,
         Config::grassNitreMaxTolerance,
         Config::grassSpreadBiomass
     };
@@ -60,16 +51,13 @@ void SpeciesRegistry::initializeSpeciesRegistry(){
         Config::treeShadeCreated,
         Config::treeSpreadModifier,
         Config::treeMaxHeight,
-        Config::treeMoistureMinTolerance,
-        Config::treeMoistureMaxTolerance,
-        Config::treeNitreMinTolerance,
         Config::treeNitreMaxTolerance,
         Config::treeSpreadBiomass
     };
 
     speciesMap[SpeciesEnum::NoSpecies] = {};
 
-    std::cerr << "Registry initialized" << std::endl;
+    //std::cerr << "Registry initialized" << std::endl;
 }
 
 const SpeciesInfo& SpeciesRegistry::getSpeciesInfo(SpeciesEnum species){

@@ -10,6 +10,7 @@
 #include "../includes/Cell.h"
 #include "../includes/Errnos.h"
 #include "../includes/Map.h"
+#include "../includes/Config.h"
 
 void MapParser::openInput(const std::string&) {
 
@@ -66,7 +67,10 @@ std::unique_ptr<Map> MapParser::parseMap() {
             }
 
             map->at(x, y)->vegetation = std::make_unique<Vegetation>(vegetation);
-
+            auto vegatation = map->at(x, y)->vegetation.get();
+            if(vegatation->getSpecies() == SpeciesEnum::Trees){
+                vegatation->setBiomass(Config::treeBaseBiomas);
+            }
         }
     }
     std::cout << "Map seed done" << std::endl;

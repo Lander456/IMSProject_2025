@@ -24,7 +24,8 @@ private:
 
     std::vector<std::vector<std::unique_ptr<Cell>>> grid;
 
-    bool expEvent(size_t averageRate, size_t interationSince);
+    bool expEvent(size_t averageRate, size_t iterationNumber);
+    double getRainAmmount();
 
 public:
     Map(size_t w, size_t h);

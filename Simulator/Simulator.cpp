@@ -23,12 +23,13 @@ void Simulator::seedFirstGeneration(const size_t numOfAcacias) {
     }
 }
 
-void Simulator::iterate(const size_t numOfIterations) const {
-    std::cout << "Beggining iteration" << std::endl;
+void Simulator::iterate(const size_t numOfIterations) {
+    //std::cout << "Beggining iteration" << std::endl;
     for (size_t i = 0; i < numOfIterations; i++) {
         map_->iterate();
+        iterationNumber++;
     }
-    std::cout << "Iterated!" << std::endl;
+    std::cout << "Iteration " << iterationNumber << std::endl;
 }
 
 void Simulator::runSimulation() const {

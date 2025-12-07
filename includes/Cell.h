@@ -28,7 +28,7 @@ public:
 
     virtual void Iterate(IterationPhase phase);
     virtual void Fertilise();
-    virtual void OnRain();
+    virtual void OnRain(double ammountRained);
     virtual void SetUp();
 
     Cell(Map& map, int x, int y, TerrainTypesEnum terainType);
@@ -42,29 +42,38 @@ public:
 protected:
     Cell* floodDirectionCell_;
 
-    void flood();
+    virtual void CheckForFlooding();
 };
 
 class DirtCell : public HabitableCell {
 public:
     DirtCell(Map& map, int x, int y);
     void Iterate(IterationPhase phase) override;
-    void OnRain() override;
+    void OnRain(double ammountRained) override;
+
+protected:
+    void CheckForFlooding() override;
 };
 
 class GravelCell : public HabitableCell {
 public:
     GravelCell(Map& map, int x, int y);
     void Iterate(IterationPhase phase) override;
-    void OnRain() override;
+    void OnRain(double ammountRained) override;
+
+protected:
+    void CheckForFlooding() override;
 };
 
 class FieldCell : public HabitableCell {
 public:
     FieldCell(Map& map, int x, int y);
     void Iterate(IterationPhase phase) override;
-    void OnRain() override;
+    void OnRain(double ammountRained) override;
     void Fertilise() override;
+    
+protected:
+    void CheckForFlooding() override;
 };
 
 class WaterCell : public Cell {

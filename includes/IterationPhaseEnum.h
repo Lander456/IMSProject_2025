@@ -3,6 +3,7 @@
 
 enum class IterationPhase {
     Soil,
+    Flood,
     Vegetation
 };
 

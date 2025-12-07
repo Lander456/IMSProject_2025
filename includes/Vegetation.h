@@ -25,6 +25,7 @@ public:
 
     void Iterate(HabitableCell* cell);
     void setSpecies(SpeciesEnum s) { species = s; biomass = 0.1; }
+    void setBiomass(double b) {biomass = b;}
 };
 
 

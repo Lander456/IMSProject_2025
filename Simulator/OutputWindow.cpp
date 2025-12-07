@@ -18,12 +18,29 @@ bool OutputWindow::OnUserUpdate(const float fElapsedTime) {
 
     if (GetKey(olc::Key::SPACE).bPressed) {
         if (manualStepping_) {
-            simulator_->iterate(1);
-
+            simulator_->iterate(iterationSteps);
+            
             drawMap();
             return true;
         }
     }
+
+    if (GetKey(olc::Key::F).bPressed){
+        iterationSteps++;
+        if(iterationSteps >= 10) iterationSteps = 10;
+    }
+    if (GetKey(olc::Key::S).bPressed){
+        iterationSteps--;
+        if(iterationSteps <= 0) iterationSteps = 1;
+    }
+
+    if (GetKey(olc::Key::NP1).bPressed) iterationSteps = 1;
+
+    if (GetKey(olc::Key::NP2).bPressed) iterationSteps = 2;
+
+    if (GetKey(olc::Key::NP3).bPressed) iterationSteps = 3;
+
+    if (GetKey(olc::Key::NP4).bPressed) iterationSteps = 4;
 
     if (GetKey(olc::Key::N).bPressed) {
         mapMode_ = MapModes::NITROGEN;
@@ -48,12 +65,12 @@ bool OutputWindow::OnUserUpdate(const float fElapsedTime) {
 
     if (!manualStepping_) {
         static float accumulatedTime = 0.0f;
-        constexpr float targetFrameTime = 1.0f / 60.0f;
+        constexpr float targetFrameTime = 1.0f / 10.0f;
 
         accumulatedTime += fElapsedTime;
 
         while (accumulatedTime >= targetFrameTime) {
-            simulator_->iterate(1);
+            simulator_->iterate(iterationSteps);
 
             accumulatedTime -= targetFrameTime;
             drawMap();
@@ -76,15 +93,15 @@ void OutputWindow::drawMap() {
                 case MapModes::NITROGEN: {
                     const auto currentCell = map_->at(x, y).get();
 
-                    Draw(static_cast<int32_t>(x), static_cast<int32_t>(y), getGradientColour(Colours::WHITE, Colours::BLACK_VOID, currentCell->soil.getNitrate()/Config::maxSoilNitre));
+                    Draw(static_cast<int32_t>(x), static_cast<int32_t>(y), getGradientColour(Colours::WHITE, Colours::BLACK_VOID, currentCell->soil.getNitrate()/1.5));
                     break;
                 }
                 case MapModes::MOISTURE: {
                     const auto currentCell = map_->at(x, y).get();
 
-                    Draw(static_cast<int32_t>(x), static_cast<int32_t>(y), getGradientColour(Colours::WHITE, Colours::WATER_BLUE, currentCell->soil.getMoisture()/Config::floodTreshold));
+                    Draw(static_cast<int32_t>(x), static_cast<int32_t>(y), getGradientColour(Colours::WHITE, Colours::WATER_BLUE, currentCell->soil.getMoisture()/100.0));
                     break;
-                }
+                } 
             }
         }
     }

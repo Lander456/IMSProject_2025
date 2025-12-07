@@ -253,4 +253,5 @@ CMakeFiles/IMS.dir/Map/MapParser.cpp.o: \
  /usr/include/c++/13/bits/fstream.tcc \
  /home/popcorn/ims/IMSProject_2025/Map/../includes/Cell.h \
  /home/popcorn/ims/IMSProject_2025/Map/../includes/Errnos.h \
- /home/popcorn/ims/IMSProject_2025/Map/../includes/Map.h
+ /home/popcorn/ims/IMSProject_2025/Map/../includes/Map.h \
+ /home/popcorn/ims/IMSProject_2025/Map/../includes/Config.h

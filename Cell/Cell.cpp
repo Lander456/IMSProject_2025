@@ -19,7 +19,7 @@ void Cell::Fertilise() {
     return;
 }
 
-void Cell::OnRain() {
+void Cell::OnRain(double ammountRained) {
     return;
 }
 
@@ -38,20 +38,8 @@ void HabitableCell::SetUp(){
     cellsInRange = map_.getCellsInRadius(gridX_, gridY_, 1);
 }
 
-void HabitableCell::flood() {
-
-    if (soil.getMoisture() >= Config::floodTreshold) {
-        if (floodDirectionCell_ == nullptr || floodDirectionCell_->terrain.getType() == TerrainTypesEnum::Rock) {
-            return;
-        }
-
-        if(floodDirectionCell_->terrain.getType() != TerrainTypesEnum::Water){
-            floodDirectionCell_->incomingSoilChanges.first += (soil.getMoisture() * Config::floodMoistureTransferedPercentage);
-            floodDirectionCell_->incomingSoilChanges.second += (soil.getNitrate() * Config::floodNitreTransferedPercentage);
-        }
-        soil.decayMoisture(1.0 - Config::floodMoistureTransferedPercentage);
-        soil.decayNitre(1.0 - Config::floodNitreTransferedPercentage);
-    }
+void HabitableCell::CheckForFlooding() {
+    return;
 }
 
 /* == DIRT CELL == */
@@ -65,13 +53,19 @@ void DirtCell::Iterate(IterationPhase phase) {
 
     switch (phase)
     {
+
+    case IterationPhase::Flood:
+        CheckForFlooding();
+        break;    
     case IterationPhase::Soil:
-        flood();
+        
+        //update moisture
         soil.decayMoisture(Config::dirtMoistureDecayRate);
+        soil.addMoisture(Config::passiveMoistureGain);
+        //update nitre
         soil.decayNitre(Config::dirtNitreDecayRate);
         soil.addNitrate(Config::passiveNitreGain);
 
-        //TODO - calculate shade
         break;
     case IterationPhase::Vegetation:
         vegetation->Iterate(this);
@@ -81,8 +75,29 @@ void DirtCell::Iterate(IterationPhase phase) {
     
 }
 
-void DirtCell::OnRain() {
-    soil.addMoisture(Config::rainAddedMoisture * Config::dirtOnRainMoistureCaptured);
+void DirtCell::OnRain(double ammountRained) {
+    soil.addMoisture(ammountRained * Config::dirtOnRainMoistureCaptured);
+}
+
+void DirtCell::CheckForFlooding(){
+
+    if (soil.getMoisture() >= Config::dirtFC) {
+        
+        if (floodDirectionCell_ == nullptr || floodDirectionCell_->terrain.getType() == TerrainTypesEnum::Rock) {
+            return;
+        }
+
+        double moistureFlooded = soil.getMoisture() - Config::dirtFC;
+        double floodedPercentage = moistureFlooded / soil.getMoisture();
+        double nitreFlooded = soil.getNitrate() * floodedPercentage * Config::nitrePercentageOnFlood;
+
+        if(floodDirectionCell_->terrain.getType() != TerrainTypesEnum::Water){
+            floodDirectionCell_->incomingSoilChanges.first += (moistureFlooded);
+            floodDirectionCell_->incomingSoilChanges.second += (nitreFlooded);
+        }
+        soil.decayMoisture(1.0 - floodedPercentage);
+        soil.decayNitre(1.0 - floodedPercentage * Config::nitrePercentageOnFlood);
+    }
 }
 
 /* == GRAVEL CELL == */
@@ -96,11 +111,17 @@ void GravelCell::Iterate(IterationPhase phase) {
 
     switch (phase)
     {
+    case IterationPhase::Flood:
+        CheckForFlooding();
+        break;    
     case IterationPhase::Soil:
-        flood();
+        //update moisture
         soil.decayMoisture(Config::gravelMoistureDecayRate);
+        soil.addMoisture(Config::passiveMoistureGain);
+        //update nitre
         soil.decayNitre(Config::gravelNitreDecayRate);
         soil.addNitrate(Config::passiveNitreGain);
+
         break;
     case IterationPhase::Vegetation:
         vegetation->Iterate(this);
@@ -108,8 +129,29 @@ void GravelCell::Iterate(IterationPhase phase) {
     }
 }
 
-void GravelCell::OnRain() {
-    soil.addMoisture(Config::rainAddedMoisture * Config::gravelOnRainMoistureCaptured);
+void GravelCell::OnRain(double ammountRained) {
+    soil.addMoisture(ammountRained * Config::gravelOnRainMoistureCaptured);
+}
+
+void GravelCell::CheckForFlooding(){
+
+    if (soil.getMoisture() >= Config::gravelFC) {
+        
+        if (floodDirectionCell_ == nullptr || floodDirectionCell_->terrain.getType() == TerrainTypesEnum::Rock) {
+            return;
+        }
+
+        double moistureFlooded = soil.getMoisture() - Config::gravelFC;
+        double floodedPercentage = moistureFlooded / soil.getMoisture();
+        double nitreFlooded = soil.getNitrate() * floodedPercentage * Config::nitrePercentageOnFlood;
+
+        if(floodDirectionCell_->terrain.getType() != TerrainTypesEnum::Water){
+            floodDirectionCell_->incomingSoilChanges.first += (moistureFlooded);
+            floodDirectionCell_->incomingSoilChanges.second += (nitreFlooded);
+        }
+        soil.decayMoisture(1.0 - floodedPercentage);
+        soil.decayNitre(1.0 - floodedPercentage * Config::nitrePercentageOnFlood);
+    }
 }
 
 /* == FIELD CELL == */
@@ -120,21 +162,50 @@ FieldCell::FieldCell(Map &map, int x, int y)
 }
 
 void FieldCell::Iterate(IterationPhase phase) {
+
     switch (phase)
     {
+    case IterationPhase::Flood:
+        CheckForFlooding();
+        break;    
     case IterationPhase::Soil:
-        flood();
+        //update moisture
         soil.decayMoisture(Config::fieldMoistureDecayRate);
+        soil.addMoisture(Config::passiveMoistureGain);
+        //update nitre
         soil.decayNitre(Config::fieldNitreDecayRate);
         soil.addNitrate(Config::passiveNitreGain);
+
         break;
     case IterationPhase::Vegetation:
+        vegetation->Iterate(this);
         break;
     }
 }
 
-void FieldCell::OnRain() {
-    soil.addMoisture(Config::rainAddedMoisture * Config::fieldOnRainMoistureCaptured);
+void FieldCell::OnRain(double ammountRained) {
+    soil.addMoisture(ammountRained * Config::fieldOnRainMoistureCaptured);
+}
+
+void FieldCell::CheckForFlooding(){
+
+    if (soil.getMoisture() >= Config::fieldFC) {
+        
+        if (floodDirectionCell_ == nullptr || floodDirectionCell_->terrain.getType() == TerrainTypesEnum::Rock) {
+            return;
+        }
+
+        double moistureFlooded = soil.getMoisture() - Config::fieldFC;
+        double floodedPercentage = moistureFlooded / soil.getMoisture();
+        double nitreFlooded = soil.getNitrate() * floodedPercentage * Config::nitrePercentageOnFlood;
+
+        if(floodDirectionCell_->terrain.getType() != TerrainTypesEnum::Water){
+            floodDirectionCell_->incomingSoilChanges.first += (moistureFlooded);
+            floodDirectionCell_->incomingSoilChanges.second += (nitreFlooded);
+        }
+        soil.decayMoisture(1.0 - floodedPercentage);
+        soil.decayNitre(1.0 - (floodedPercentage* Config::nitrePercentageOnFlood));
+    }
 }
 
 void FieldCell::Fertilise() {
